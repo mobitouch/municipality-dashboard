@@ -31,7 +31,7 @@ export default function SettingsPage() {
               (label) => (
                 <label key={label} className="flex items-center justify-between">
                   <span className="text-slate-700">{label}</span>
-                  <input type="checkbox" defaultChecked className="h-4 w-4 rounded border-slate-300 text-blue-600" />
+                  <input type="checkbox" defaultChecked className="h-4 w-4 rounded border-slate-300 text-koura-primary" />
                 </label>
               )
             )}

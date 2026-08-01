@@ -42,7 +42,7 @@ export default function RequestDetail({
 
       <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h2 className="text-xl font-semibold text-slate-900">{request.referenceNumber}</h2>
+          <h2 className="text-xl font-semibold text-koura-text">{request.referenceNumber}</h2>
           <p className="text-sm text-slate-500">{request.category}</p>
         </div>
         <div className="flex gap-2">
@@ -137,7 +137,7 @@ export default function RequestDetail({
                 .reverse()
                 .map((a) => (
                   <li key={a.id} className="relative">
-                    <span className="absolute -left-[21px] top-1 h-2.5 w-2.5 rounded-full bg-blue-600 ring-4 ring-white" />
+                    <span className="absolute -left-[21px] top-1 h-2.5 w-2.5 rounded-full bg-koura-primary ring-4 ring-white" />
                     <p className="text-sm font-medium text-slate-800">{a.action}</p>
                     <p className="text-sm text-slate-600">{a.detail}</p>
                     <p className="text-xs text-slate-400">

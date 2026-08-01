@@ -3,13 +3,13 @@
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 const COLORS: Record<string, string> = {
-  New: "#0284c7",
-  "Under Review": "#d97706",
-  Assigned: "#7c3aed",
-  "In Progress": "#2563eb",
-  Resolved: "#059669",
-  Closed: "#64748b",
-  Rejected: "#e11d48",
+  New: "#2a78d6",
+  "Under Review": "#eb6834",
+  Assigned: "#1baf7a",
+  "In Progress": "#eda100",
+  Resolved: "#008300",
+  Closed: "#4a3aa7",
+  Rejected: "#e34948",
 };
 
 export default function StatusPieChart({ data }: { data: { name: string; count: number }[] }) {
@@ -31,10 +31,10 @@ export default function StatusPieChart({ data }: { data: { name: string; count: 
           paddingAngle={2}
         >
           {data.map((entry) => (
-            <Cell key={entry.name} fill={COLORS[entry.name] ?? "#94a3b8"} />
+            <Cell key={entry.name} fill={COLORS[entry.name] ?? "#898781"} />
           ))}
         </Pie>
-        <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8, border: "1px solid #e2e8f0" }} />
+        <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8, border: "1px solid #e5e1d8" }} />
         <Legend wrapperStyle={{ fontSize: 12 }} />
       </PieChart>
     </ResponsiveContainer>

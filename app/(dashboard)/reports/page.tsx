@@ -23,7 +23,7 @@ export default function ReportsPage() {
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
           <h2 className="mb-1 text-sm font-semibold text-slate-800">Requests by Department</h2>
-          <BarChartCard data={summary.byDepartment} horizontal color="#2563eb" />
+          <BarChartCard data={summary.byDepartment} horizontal color="#4A6635" />
         </div>
 
         <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
@@ -34,9 +34,9 @@ export default function ReportsPage() {
         <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
           <div className="mb-1 flex items-baseline justify-between">
             <h2 className="text-sm font-semibold text-slate-800">Most Common Category</h2>
-            <span className="text-sm font-medium text-blue-700">{summary.mostCommonCategory}</span>
+            <span className="text-sm font-medium text-koura-secondary">{summary.mostCommonCategory}</span>
           </div>
-          <BarChartCard data={summary.byCategory} horizontal color="#0d9488" />
+          <BarChartCard data={summary.byCategory} horizontal color="#8B5A2B" />
         </div>
 
         <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
@@ -50,7 +50,7 @@ export default function ReportsPage() {
           <BarChartCard
             data={summary.resolutionPerformance.map((r) => ({ name: r.name, count: r.avgDays }))}
             horizontal
-            color="#d97706"
+            color="#748047"
           />
         </div>
 
@@ -87,7 +87,7 @@ export default function ReportsPage() {
                   {summary.urgentUnresolved.map((r) => (
                     <tr key={r.id} className="hover:bg-slate-50">
                       <td className="px-4 py-2.5">
-                        <Link href={`/requests/${r.id}`} className="font-medium text-blue-700 hover:underline">
+                        <Link href={`/requests/${r.id}`} className="font-medium text-koura-primary hover:underline">
                           {r.referenceNumber}
                         </Link>
                       </td>

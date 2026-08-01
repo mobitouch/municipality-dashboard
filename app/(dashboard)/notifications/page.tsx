@@ -30,7 +30,7 @@ export default function NotificationsPage() {
             const Icon = CHANNEL_ICON[n.channel] ?? Mail;
             return (
               <li key={n.id} className="flex items-start gap-3 px-4 py-3.5">
-                <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+                <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-koura-primary/10 text-koura-primary">
                   <Icon className="h-4 w-4" />
                 </div>
                 <div className="flex-1">

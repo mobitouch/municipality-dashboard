@@ -6,7 +6,7 @@ import type { CitizenRequest, Department, Staff } from "@/lib/types";
 import { REQUEST_STATUSES, PRIORITIES } from "@/lib/types";
 
 const selectClass =
-  "w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20";
+  "w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-koura-primary focus:outline-none focus:ring-2 focus:ring-koura-primary/20";
 
 function Field({
   label,
@@ -21,7 +21,7 @@ function Field({
     <div>
       <label className="mb-1 flex items-center gap-2 text-sm font-medium text-slate-700">
         {label}
-        {saving && <span className="text-xs font-normal text-blue-500">Saving...</span>}
+        {saving && <span className="text-xs font-normal text-koura-primary">Saving...</span>}
       </label>
       {children}
     </div>
@@ -124,7 +124,7 @@ export default function RequestActions({
             value={noteText}
             onChange={(e) => setNoteText(e.target.value)}
             rows={2}
-            className="flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+            className="flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-koura-primary focus:outline-none focus:ring-2 focus:ring-koura-primary/20"
             placeholder="Visible to municipal staff only..."
           />
           <button
@@ -133,7 +133,7 @@ export default function RequestActions({
               await patch({ note: noteText }, "note");
               setNoteText("");
             }}
-            className="self-start rounded-lg bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800"
+            className="self-start rounded-lg bg-koura-primary px-4 py-2 text-sm font-medium text-white hover:bg-koura-primary/90"
           >
             Add Note
           </button>

@@ -31,7 +31,7 @@ export default function StaffPage() {
                 <tr key={s.id} className="hover:bg-slate-50">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2.5">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-xs font-semibold text-blue-700">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-koura-primary/10 text-xs font-semibold text-koura-primary">
                         {s.name
                           .split(" ")
                           .map((n) => n[0])

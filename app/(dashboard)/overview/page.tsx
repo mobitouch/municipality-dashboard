@@ -25,7 +25,7 @@ export default function OverviewPage() {
       subtitle="Live snapshot of citizen requests across the municipality"
     >
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-6">
-        <MetricCard label="Total Requests" value={totals.total} icon={ClipboardList} accent="text-blue-600 bg-blue-50" />
+        <MetricCard label="Total Requests" value={totals.total} icon={ClipboardList} accent="text-koura-primary bg-koura-primary/10" />
         <MetricCard label="New" value={totals.new} icon={Sparkles} accent="text-sky-600 bg-sky-50" />
         <MetricCard label="In Progress" value={totals.inProgress} icon={Loader} accent="text-violet-600 bg-violet-50" />
         <MetricCard label="Resolved" value={totals.resolved} icon={CheckCircle2} accent="text-emerald-600 bg-emerald-50" />
@@ -42,12 +42,12 @@ export default function OverviewPage() {
         <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
           <h2 className="mb-1 text-sm font-semibold text-slate-800">Requests by Department</h2>
           <p className="mb-3 text-xs text-slate-500">Current caseload across municipal departments</p>
-          <BarChartCard data={summary.byDepartment} horizontal color="#2563eb" />
+          <BarChartCard data={summary.byDepartment} horizontal color="#4A6635" />
         </div>
         <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
           <h2 className="mb-1 text-sm font-semibold text-slate-800">Requests by Category</h2>
           <p className="mb-3 text-xs text-slate-500">Most common types of citizen requests</p>
-          <BarChartCard data={summary.byCategory} horizontal color="#0d9488" />
+          <BarChartCard data={summary.byCategory} horizontal color="#8B5A2B" />
         </div>
       </div>
     </PageShell>

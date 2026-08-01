@@ -35,7 +35,7 @@ export const STATUS_COLORS: Record<string, string> = {
   New: "bg-sky-100 text-sky-700 ring-sky-600/20",
   "Under Review": "bg-amber-100 text-amber-700 ring-amber-600/20",
   Assigned: "bg-violet-100 text-violet-700 ring-violet-600/20",
-  "In Progress": "bg-blue-100 text-blue-700 ring-blue-600/20",
+  "In Progress": "bg-koura-primary/10 text-koura-primary ring-koura-primary/20",
   Resolved: "bg-emerald-100 text-emerald-700 ring-emerald-600/20",
   Closed: "bg-slate-200 text-slate-700 ring-slate-600/20",
   Rejected: "bg-rose-100 text-rose-700 ring-rose-600/20",

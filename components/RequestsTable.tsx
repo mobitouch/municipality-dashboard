@@ -46,7 +46,7 @@ export default function RequestsTable({
           {requests.map((r) => (
             <tr key={r.id} className="transition-colors hover:bg-slate-50">
               <td className="px-4 py-3">
-                <Link href={`${basePath}/${r.id}`} className="font-medium text-blue-700 hover:underline">
+                <Link href={`${basePath}/${r.id}`} className="font-medium text-koura-primary hover:underline">
                   {r.referenceNumber}
                 </Link>
               </td>

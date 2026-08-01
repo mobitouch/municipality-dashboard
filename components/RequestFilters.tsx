@@ -37,7 +37,7 @@ export default function RequestFilters({
   }, [q]);
 
   const selectClass =
-    "rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-sm text-slate-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20";
+    "rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-sm text-slate-700 focus:border-koura-primary focus:outline-none focus:ring-2 focus:ring-koura-primary/20";
 
   return (
     <div className="mb-4 flex flex-wrap items-center gap-2 rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
@@ -48,7 +48,7 @@ export default function RequestFilters({
           placeholder="Search citizen, reference, location..."
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          className="w-64 rounded-lg border border-slate-300 py-1.5 pl-8 pr-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+          className="w-64 rounded-lg border border-slate-300 py-1.5 pl-8 pr-3 text-sm focus:border-koura-primary focus:outline-none focus:ring-2 focus:ring-koura-primary/20"
         />
       </div>
 

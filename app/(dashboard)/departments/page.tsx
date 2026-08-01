@@ -19,11 +19,11 @@ export default function DepartmentsPage() {
           return (
             <div key={dept.id} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
               <div className="mb-3 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-koura-secondary/10 text-koura-secondary">
                   <Building2 className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-semibold text-slate-900">{dept.name}</h3>
+                  <h3 className="text-sm font-semibold text-koura-text">{dept.name}</h3>
                   <p className="text-xs text-slate-500">Head: {dept.headOfDepartment}</p>
                 </div>
               </div>

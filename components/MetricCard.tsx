@@ -4,7 +4,7 @@ export default function MetricCard({
   label,
   value,
   icon: Icon,
-  accent = "text-blue-600 bg-blue-50",
+  accent = "text-koura-primary bg-koura-primary/10",
 }: {
   label: string;
   value: string | number;
@@ -19,7 +19,7 @@ export default function MetricCard({
           <Icon className="h-4.5 w-4.5" />
         </div>
       </div>
-      <p className="mt-3 text-2xl font-semibold text-slate-900">{value}</p>
+      <p className="mt-3 text-2xl font-semibold text-koura-text">{value}</p>
     </div>
   );
 }
