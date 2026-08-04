@@ -15,10 +15,11 @@ export default function LogoutButton() {
   return (
     <button
       onClick={handleLogout}
-      className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900"
+      aria-label="Sign out"
+      className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 sm:px-3"
     >
       <LogOut className="h-4 w-4" />
-      Sign out
+      <span className="hidden sm:inline">Sign out</span>
     </button>
   );
 }

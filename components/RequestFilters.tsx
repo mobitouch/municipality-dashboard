@@ -41,14 +41,14 @@ export default function RequestFilters({
 
   return (
     <div className="mb-4 flex flex-wrap items-center gap-2 rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
-      <div className="relative">
+      <div className="relative w-full sm:w-64">
         <Search className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
         <input
           type="text"
           placeholder="Search citizen, reference, location..."
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          className="w-64 rounded-lg border border-slate-300 py-1.5 pl-8 pr-3 text-sm focus:border-koura-primary focus:outline-none focus:ring-2 focus:ring-koura-primary/20"
+          className="w-full rounded-lg border border-slate-300 py-1.5 pl-8 pr-3 text-sm focus:border-koura-primary focus:outline-none focus:ring-2 focus:ring-koura-primary/20"
         />
       </div>
 

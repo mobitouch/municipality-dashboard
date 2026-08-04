@@ -3,6 +3,7 @@ import { buildSummary } from "@/lib/reports";
 import PageShell from "@/components/PageShell";
 import MetricCard from "@/components/MetricCard";
 import BarChartCard from "@/components/charts/BarChartCard";
+import AutoRefresh from "@/components/AutoRefresh";
 import {
   ClipboardList,
   Sparkles,
@@ -24,7 +25,8 @@ export default function OverviewPage() {
       title="Overview"
       subtitle="Live snapshot of citizen requests across the municipality"
     >
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-6">
+      <AutoRefresh />
+      <div className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 sm:gap-4 lg:grid-cols-3 xl:grid-cols-6">
         <MetricCard label="Total Requests" value={totals.total} icon={ClipboardList} accent="text-koura-primary bg-koura-primary/10" />
         <MetricCard label="New" value={totals.new} icon={Sparkles} accent="text-sky-600 bg-sky-50" />
         <MetricCard label="In Progress" value={totals.inProgress} icon={Loader} accent="text-violet-600 bg-violet-50" />

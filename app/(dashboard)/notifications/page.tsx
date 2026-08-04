@@ -1,5 +1,6 @@
 import { readDb } from "@/lib/db";
 import PageShell from "@/components/PageShell";
+import AutoRefresh from "@/components/AutoRefresh";
 import { Mail, MessageSquare, Smartphone } from "lucide-react";
 
 const CHANNEL_ICON = { Email: Mail, SMS: MessageSquare, App: Smartphone } as const;
@@ -24,6 +25,7 @@ export default function NotificationsPage() {
       title="Notifications"
       subtitle="Automatic citizen notifications sent as requests are processed"
     >
+      <AutoRefresh />
       <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
         <ul className="divide-y divide-slate-100">
           {db.notifications.map((n) => {

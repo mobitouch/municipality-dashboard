@@ -26,6 +26,17 @@ npm run build
 npm run start
 ```
 
+## Environment Variables
+
+Optional — copy `.env.example` to `.env.local` to override the demo defaults:
+
+| Variable | Description |
+|---|---|
+| `API_KEY` | Shared secret external callers (website, n8n) send as `x-api-key`. Defaults to `mobitouch-demo-key`. |
+| `ADMIN_USERNAME` / `ADMIN_PASSWORD` | Staff login. Defaults to `admin@mobitouch.demo` / `Demo@2026`. |
+
+Nothing breaks if these are left unset — the app runs with the same demo values as before.
+
 ## Resetting Demo Data
 
 Any status change, assignment, or note made during a rehearsal is saved to
@@ -48,11 +59,12 @@ Any status change, assignment, or note made during a rehearsal is saved to
 7. Mention that Wissam Tannous receives an automatic notification at each step —
    see the **Notifications** page for what the citizen would have received.
 
-## Chatbot / n8n Integration
+## Website, Chatbot / n8n Integration
 
-The dashboard exposes a real endpoint that an n8n workflow (or a chatbot backend)
-can call to create a new request — this is the "way for n8n to add a request"
-called for in the plan:
+The dashboard exposes a real endpoint that external callers use to create a new
+request — the live municipal website's Contact and Report an Issue forms POST
+here directly (server-to-server, from the website's own API routes), and it's
+also the "way for n8n to add a request" called for in the plan:
 
 ```bash
 curl -X POST http://localhost:3000/api/requests \
@@ -69,13 +81,27 @@ curl -X POST http://localhost:3000/api/requests \
 ```
 
 It appears instantly in **Citizen Requests** or **Complaints** (the `kind` is
-inferred from `category`), tagged with source "chatbot". The same demo API key is
-shown on the **Settings** page. `category` must match one of the categories in
-`lib/constants.ts`.
+inferred from `category`), tagged with source "chatbot" by default — pass an
+explicit `"source": "website"` (as the live website's forms do) to tag it
+correctly instead. The same demo API key is shown on the **Settings** page.
+`category` must match one of the categories in `lib/constants.ts`; two were
+added specifically for the website integration: `Health & Environment` and
+`General Inquiry` (the latter also covers the website's general Contact form,
+which has no natural category of its own).
+
+A matching confirmation `Notification` row is created automatically for every
+new request, live ones included — visible on the **Notifications** page.
 
 Internal dashboard actions (viewing/updating requests) are authenticated by the
 staff session cookie set at login; the `x-api-key` header is only needed for
-external callers like n8n that don't have that session.
+external callers like n8n or the website that don't have that session. Set the
+`API_KEY` env var (see `.env.example`) so the key isn't just the checked-in
+demo value once this app is reachable from the public website — the website
+needs the same value in its own `DASHBOARD_API_KEY`.
+
+Requests/Complaints/Overview/Notifications poll every 8s (`components/AutoRefresh.tsx`)
+so anything posted here shows up without a manual reload — useful both for the
+live n8n/website demo and for daily use.
 
 ## What's Real vs. What's a Placeholder
 

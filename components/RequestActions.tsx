@@ -57,7 +57,7 @@ export default function RequestActions({
 
   return (
     <div className="space-y-5">
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Field label="Status" saving={savingField === "status"}>
           <select
             value={request.status}
@@ -119,7 +119,7 @@ export default function RequestActions({
 
       <div>
         <label className="mb-1 block text-sm font-medium text-slate-700">Add internal note</label>
-        <div className="flex gap-2">
+        <div className="flex flex-col gap-2 sm:flex-row">
           <textarea
             value={noteText}
             onChange={(e) => setNoteText(e.target.value)}
@@ -133,7 +133,7 @@ export default function RequestActions({
               await patch({ note: noteText }, "note");
               setNoteText("");
             }}
-            className="self-start rounded-lg bg-koura-primary px-4 py-2 text-sm font-medium text-white hover:bg-koura-primary/90"
+            className="rounded-lg bg-koura-primary px-4 py-2 text-sm font-medium text-white hover:bg-koura-primary/90 sm:self-start"
           >
             Add Note
           </button>

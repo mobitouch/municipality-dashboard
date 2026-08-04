@@ -55,7 +55,7 @@ export default function RequestDetail({
         <div className="space-y-6 lg:col-span-2">
           <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
             <h3 className="mb-3 text-sm font-semibold text-slate-800">Request Details</h3>
-            <dl className="grid grid-cols-2 gap-4 text-sm">
+            <dl className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
               <div>
                 <dt className="flex items-center gap-1.5 text-slate-500">
                   <User className="h-3.5 w-3.5" /> Citizen
@@ -80,7 +80,7 @@ export default function RequestDetail({
                 </dt>
                 <dd className="mt-0.5 font-medium text-slate-800">{formatDateTime(request.dateSubmitted)}</dd>
               </div>
-              <div className="col-span-2">
+              <div className="sm:col-span-2">
                 <dt className="text-slate-500">Description</dt>
                 <dd className="mt-0.5 text-slate-700">{request.description}</dd>
               </div>
@@ -105,7 +105,7 @@ export default function RequestDetail({
                   alt="Citizen attachment"
                   width={320}
                   height={240}
-                  className="rounded-lg border border-slate-200"
+                  className="h-auto w-full max-w-[320px] rounded-lg border border-slate-200"
                 />
               </div>
             )}

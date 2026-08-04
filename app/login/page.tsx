@@ -41,7 +41,7 @@ export default function LoginPage() {
           <p className="mt-1 text-sm text-slate-300">Staff Dashboard</p>
         </div>
 
-        <div className="rounded-2xl bg-white p-8 shadow-xl">
+        <div className="rounded-2xl bg-white p-6 shadow-xl sm:p-8">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="mb-1 block text-sm font-medium text-slate-700">

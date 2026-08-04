@@ -1,14 +1,16 @@
 export const SESSION_COOKIE = "mobitouch_session";
 
 export const DEMO_CREDENTIALS = {
-  username: "admin@mobitouch.demo",
-  password: "Demo@2026",
+  username: process.env.ADMIN_USERNAME ?? "admin@mobitouch.demo",
+  password: process.env.ADMIN_PASSWORD ?? "Demo@2026",
 };
 
-// Shared secret the n8n workflow (or curl, standing in for it) sends as
-// `x-api-key` when posting a new request. Swap for a real secret before
-// this endpoint is ever exposed outside a local demo.
-export const N8N_API_KEY = "mobitouch-demo-key";
+// Shared secret external callers send as `x-api-key` when posting a new
+// request — the n8n chatbot workflow, and the live municipal website's
+// Contact/Report an Issue forms. Set API_KEY in the environment on both
+// this app and the website so they agree; falls back to the demo value
+// so a local checkout still works untouched.
+export const N8N_API_KEY = process.env.API_KEY ?? "mobitouch-demo-key";
 
 export interface CategoryDef {
   id: string;
@@ -29,6 +31,8 @@ export const CATEGORIES: CategoryDef[] = [
   { id: "parks-trees", name: "Parks & Trees", defaultDepartmentId: "dept-parks", kind: "request" },
   { id: "noise-complaints", name: "Noise Complaints", defaultDepartmentId: "dept-code-enforcement", kind: "complaint" },
   { id: "permits-licensing", name: "Permits & Licensing", defaultDepartmentId: "dept-permits", kind: "request" },
+  { id: "health-environment", name: "Health & Environment", defaultDepartmentId: "dept-sanitation", kind: "complaint" },
+  { id: "general-inquiry", name: "General Inquiry", defaultDepartmentId: "dept-admin", kind: "request" },
 ];
 
 export const STATUS_COLORS: Record<string, string> = {

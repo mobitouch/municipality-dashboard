@@ -6,6 +6,21 @@ import { CATEGORIES } from "@/lib/constants";
 import { filterRequests } from "@/lib/requests";
 import type { CitizenRequest, RequestSource } from "@/lib/types";
 
+const VALID_SOURCES: RequestSource[] = ["website", "chatbot", "phone", "walk-in"];
+
+function isValidSource(value: unknown): value is RequestSource {
+  return typeof value === "string" && (VALID_SOURCES as string[]).includes(value);
+}
+
+// Mirrors scripts/seed.mjs's sourceLabel() so live-created requests read the
+// same way as seeded demo ones.
+function sourceLabel(source: RequestSource): string {
+  if (source === "chatbot") return "Citizen (via chatbot)";
+  if (source === "website") return "Citizen (via website)";
+  if (source === "phone") return "Citizen (via phone)";
+  return "Citizen (walk-in)";
+}
+
 export async function GET(request: NextRequest) {
   if (!hasSession(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -44,7 +59,15 @@ export async function POST(request: NextRequest) {
   const db = readDb();
   const categoryDef = CATEGORIES.find((c) => c.name === body.category);
   const now = new Date().toISOString();
-  const source: RequestSource = hasApiKey(request) && !hasSession(request) ? "chatbot" : body.source ?? "website";
+  // An explicit, valid source (e.g. "website" from the live municipal site)
+  // is always respected. Only fall back to inferring from the auth method
+  // when the caller didn't specify one — this keeps n8n's existing default
+  // ("chatbot", since it authenticates via API key with no session) intact.
+  const source: RequestSource = isValidSource(body.source)
+    ? body.source
+    : hasApiKey(request) && !hasSession(request)
+      ? "chatbot"
+      : "website";
 
   const newRequest: CitizenRequest = {
     id: newId("req"),
@@ -66,7 +89,7 @@ export async function POST(request: NextRequest) {
       {
         id: newId("act"),
         timestamp: now,
-        actor: source === "chatbot" ? "Citizen (via chatbot)" : "Citizen",
+        actor: sourceLabel(source),
         action: "Request submitted",
         detail: categoryDef
           ? `New request received and logged in the system (suggested department: ${categoryDef.defaultDepartmentId}).`
@@ -78,6 +101,14 @@ export async function POST(request: NextRequest) {
   };
 
   db.requests.push(newRequest);
+  db.notifications.unshift({
+    id: newId("notif"),
+    timestamp: now,
+    recipient: newRequest.citizenName,
+    channel: source === "phone" ? "SMS" : "Email",
+    message: `Your request ${newRequest.referenceNumber} ("${newRequest.category}") has been received and logged.`,
+    relatedRequestId: newRequest.id,
+  });
   writeDb(db);
 
   return NextResponse.json({ request: newRequest }, { status: 201 });

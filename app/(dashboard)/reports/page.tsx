@@ -70,40 +70,69 @@ export default function ReportsPage() {
           {summary.urgentUnresolved.length === 0 ? (
             <p className="py-6 text-center text-sm text-slate-400">No urgent unresolved requests. 🎉</p>
           ) : (
-            <div className="overflow-hidden rounded-lg border border-slate-200">
-              <div className="overflow-x-auto">
-              <table className="w-full min-w-[700px] text-left text-sm">
-                <thead className="border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
-                  <tr>
-                    <th className="px-4 py-2.5 font-medium">Reference</th>
-                    <th className="px-4 py-2.5 font-medium">Citizen</th>
-                    <th className="px-4 py-2.5 font-medium">Category</th>
-                    <th className="px-4 py-2.5 font-medium">Department</th>
-                    <th className="px-4 py-2.5 font-medium">Status</th>
-                    <th className="px-4 py-2.5 font-medium">Submitted</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {summary.urgentUnresolved.map((r) => (
-                    <tr key={r.id} className="hover:bg-slate-50">
-                      <td className="px-4 py-2.5">
-                        <Link href={`/requests/${r.id}`} className="font-medium text-koura-primary hover:underline">
-                          {r.referenceNumber}
-                        </Link>
-                      </td>
-                      <td className="px-4 py-2.5 text-slate-700">{r.citizenName}</td>
-                      <td className="px-4 py-2.5 text-slate-600">{r.category}</td>
-                      <td className="px-4 py-2.5 text-slate-600">{r.departmentName}</td>
-                      <td className="px-4 py-2.5">
-                        <StatusBadge status={r.status} />
-                      </td>
-                      <td className="px-4 py-2.5 text-slate-500">{formatDate(r.dateSubmitted)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <>
+              {/* Mobile card list */}
+              <div className="space-y-2.5 md:hidden">
+                {summary.urgentUnresolved.map((r) => (
+                  <Link
+                    key={r.id}
+                    href={`/requests/${r.id}`}
+                    className="block rounded-lg border border-slate-200 p-3 transition-colors hover:border-koura-primary/30 active:bg-koura-bg"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="font-medium text-koura-primary">{r.referenceNumber}</p>
+                        <p className="mt-0.5 truncate text-sm text-slate-700">{r.citizenName}</p>
+                      </div>
+                      <StatusBadge status={r.status} />
+                    </div>
+                    <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500">
+                      <span>{r.category}</span>
+                      <span className="text-slate-300">·</span>
+                      <span>{r.departmentName}</span>
+                      <span className="text-slate-300">·</span>
+                      <span>{formatDate(r.dateSubmitted)}</span>
+                    </div>
+                  </Link>
+                ))}
               </div>
-            </div>
+
+              {/* Desktop table */}
+              <div className="hidden overflow-hidden rounded-lg border border-slate-200 md:block">
+                <div className="overflow-x-auto">
+                <table className="w-full min-w-[700px] text-left text-sm">
+                  <thead className="border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+                    <tr>
+                      <th className="px-4 py-2.5 font-medium">Reference</th>
+                      <th className="px-4 py-2.5 font-medium">Citizen</th>
+                      <th className="px-4 py-2.5 font-medium">Category</th>
+                      <th className="px-4 py-2.5 font-medium">Department</th>
+                      <th className="px-4 py-2.5 font-medium">Status</th>
+                      <th className="px-4 py-2.5 font-medium">Submitted</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {summary.urgentUnresolved.map((r) => (
+                      <tr key={r.id} className="hover:bg-slate-50">
+                        <td className="px-4 py-2.5">
+                          <Link href={`/requests/${r.id}`} className="font-medium text-koura-primary hover:underline">
+                            {r.referenceNumber}
+                          </Link>
+                        </td>
+                        <td className="px-4 py-2.5 text-slate-700">{r.citizenName}</td>
+                        <td className="px-4 py-2.5 text-slate-600">{r.category}</td>
+                        <td className="px-4 py-2.5 text-slate-600">{r.departmentName}</td>
+                        <td className="px-4 py-2.5">
+                          <StatusBadge status={r.status} />
+                        </td>
+                        <td className="px-4 py-2.5 text-slate-500">{formatDate(r.dateSubmitted)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                </div>
+              </div>
+            </>
           )}
         </div>
       </div>
