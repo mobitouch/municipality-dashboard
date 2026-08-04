@@ -1,102 +1,199 @@
-import { readDb } from "@/lib/db";
-import PageShell from "@/components/PageShell";
-import { CLOSED_STATUSES } from "@/lib/constants";
+import Link from "next/link";
+import type { Metadata } from "next";
+import { PlusIcon, UsersIcon } from "lucide-react";
 
+import { PageShell } from "@/components/app-shell/page-shell";
+import { EmptyState } from "@/components/empty-state";
+import { StaffActions } from "@/components/staff/staff-actions";
+import { StaffFilters } from "@/components/staff/staff-filters";
+import { StaffFormDialog } from "@/components/staff/staff-form-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { requireUser } from "@/lib/auth/dal";
+import { can } from "@/lib/auth/permissions";
+import { listDepartments } from "@/lib/data/departments";
+import { listStaff } from "@/lib/data/staff";
+import { initials, pluralize } from "@/lib/format";
+import { cn } from "@/lib/utils";
+
+export const metadata: Metadata = { title: "Staff" };
 export const dynamic = "force-dynamic";
 
-export default function StaffPage() {
-  const db = readDb();
-  const deptName = (id: string) => db.departments.find((d) => d.id === id)?.name ?? id;
+export default async function StaffPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const params = await searchParams;
+  const single = (key: string) => {
+    const value = params[key];
+    return (Array.isArray(value) ? value[0] : value) ?? "";
+  };
+
+  const user = await requireUser();
+  const departments = listDepartments({ includeInactive: true });
+  const staff = listStaff({
+    q: single("q"),
+    departmentId: single("departmentId"),
+    includeInactive: single("inactive") === "1",
+  });
+
+  const canManage = can(user.role, "staff:manage");
+  const hasFilters = Boolean(single("q") || single("departmentId") || single("inactive"));
 
   return (
-    <PageShell title="Staff" subtitle="Municipal employees available for request assignment">
-      {/* Mobile card list */}
-      <div className="space-y-3 md:hidden">
-        {db.staff.map((s) => {
-          const active = db.requests.filter(
-            (r) => r.assignedStaffId === s.id && !CLOSED_STATUSES.includes(r.status)
-          ).length;
-          return (
-            <div key={s.id} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex min-w-0 items-center gap-2.5">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-koura-primary/10 text-xs font-semibold text-koura-primary">
-                    {s.name
-                      .split(" ")
-                      .map((n) => n[0])
-                      .slice(0, 2)
-                      .join("")}
+    <PageShell
+      title="Staff"
+      subtitle={`${pluralize(staff.length, "employee")} available for request assignment`}
+      actions={
+        canManage &&
+        departments.length > 0 && (
+          <StaffFormDialog
+            departments={departments}
+            defaultDepartmentId={single("departmentId") || undefined}
+            trigger={
+              <Button size="sm">
+                <PlusIcon />
+                <span className="hidden sm:inline">Add staff</span>
+              </Button>
+            }
+          />
+        )
+      }
+    >
+      <StaffFilters departments={departments} />
+
+      {staff.length === 0 ? (
+        <EmptyState
+          icon={UsersIcon}
+          title={hasFilters ? "No matching staff" : "No staff yet"}
+          description={
+            hasFilters
+              ? "Try a different search, or clear the filters."
+              : departments.length === 0
+                ? "Create a department first — every staff member belongs to one."
+                : "Add the people who will be assigned citizen requests."
+          }
+          action={
+            canManage && departments.length > 0 && !hasFilters ? (
+              <StaffFormDialog
+                departments={departments}
+                trigger={
+                  <Button>
+                    <PlusIcon />
+                    Add staff member
+                  </Button>
+                }
+              />
+            ) : departments.length === 0 ? (
+              <Button asChild variant="outline">
+                <Link href="/departments">Go to Departments</Link>
+              </Button>
+            ) : null
+          }
+        />
+      ) : (
+        <>
+          {/* Card list on phones; the table below needs horizontal room. */}
+          <ul className="space-y-2.5 md:hidden">
+            {staff.map((person) => (
+              <li key={person.id} className="bg-card rounded-xl border p-3.5">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex min-w-0 items-center gap-2.5">
+                    <div className="bg-primary/10 text-primary flex size-9 shrink-0 items-center justify-center rounded-full text-xs font-semibold">
+                      {initials(person.name)}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="truncate font-medium">{person.name}</p>
+                      <p className="text-muted-foreground truncate text-xs">
+                        {[person.role, person.departmentName].filter(Boolean).join(" · ")}
+                      </p>
+                    </div>
                   </div>
-                  <div className="min-w-0">
-                    <p className="truncate font-medium text-slate-800">{s.name}</p>
-                    <p className="truncate text-xs text-slate-500">
-                      {s.role} · {deptName(s.departmentId)}
-                    </p>
+                  <div className="flex shrink-0 items-center gap-1">
+                    <Badge variant="secondary">{person.activeRequestCount} active</Badge>
+                    {canManage && <StaffActions staff={person} departments={departments} />}
                   </div>
                 </div>
-                <span className="inline-flex shrink-0 items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-700">
-                  {active} active
-                </span>
-              </div>
-              <div className="mt-3 space-y-0.5 border-t border-slate-100 pt-3 text-xs text-slate-500">
-                <div>{s.email}</div>
-                <div>{s.phone}</div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+                <div className="text-muted-foreground mt-2.5 space-y-0.5 border-t pt-2.5 text-xs">
+                  <p>{person.email || "No email"}</p>
+                  <p>{person.phone || "No phone"}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
 
-      {/* Desktop table */}
-      <div className="hidden overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm md:block">
-        <div className="overflow-x-auto">
-        <table className="w-full min-w-[700px] text-left text-sm">
-          <thead className="border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
-            <tr>
-              <th className="px-4 py-3 font-medium">Name</th>
-              <th className="px-4 py-3 font-medium">Role</th>
-              <th className="px-4 py-3 font-medium">Department</th>
-              <th className="px-4 py-3 font-medium">Contact</th>
-              <th className="px-4 py-3 font-medium">Active Requests</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {db.staff.map((s) => {
-              const active = db.requests.filter(
-                (r) => r.assignedStaffId === s.id && !CLOSED_STATUSES.includes(r.status)
-              ).length;
-              return (
-                <tr key={s.id} className="hover:bg-slate-50">
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-2.5">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-koura-primary/10 text-xs font-semibold text-koura-primary">
-                        {s.name
-                          .split(" ")
-                          .map((n) => n[0])
-                          .slice(0, 2)
-                          .join("")}
+          <div className="bg-card hidden overflow-hidden rounded-xl border md:block">
+            <Table className="min-w-[48rem]">
+              <TableHeader>
+                <TableRow className="bg-muted/40 hover:bg-muted/40">
+                  <TableHead>Name</TableHead>
+                  <TableHead>Job title</TableHead>
+                  <TableHead>Department</TableHead>
+                  <TableHead>Contact</TableHead>
+                  <TableHead className="w-[7rem]">Workload</TableHead>
+                  {canManage && <TableHead className="w-12" />}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {staff.map((person) => (
+                  <TableRow key={person.id} className={cn(!person.isActive && "opacity-60")}>
+                    <TableCell>
+                      <div className="flex items-center gap-2.5">
+                        <div className="bg-primary/10 text-primary flex size-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold">
+                          {initials(person.name)}
+                        </div>
+                        <div className="min-w-0">
+                          <span className="block font-medium">{person.name}</span>
+                          {!person.isActive && (
+                            <span className="text-muted-foreground text-xs">Inactive</span>
+                          )}
+                        </div>
                       </div>
-                      <span className="font-medium text-slate-800">{s.name}</span>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-slate-600">{s.role}</td>
-                  <td className="px-4 py-3 text-slate-600">{deptName(s.departmentId)}</td>
-                  <td className="px-4 py-3 text-slate-500">
-                    <div>{s.email}</div>
-                    <div>{s.phone}</div>
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-700">
-                      {active}
-                    </span>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-        </div>
-      </div>
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">{person.role || "—"}</TableCell>
+                    <TableCell className="text-muted-foreground">
+                      <Link
+                        href={`/staff?departmentId=${person.departmentId}`}
+                        className="hover:text-foreground transition-colors"
+                      >
+                        {person.departmentName}
+                      </Link>
+                    </TableCell>
+                    <TableCell className="text-muted-foreground text-xs">
+                      <span className="block">{person.email || "—"}</span>
+                      <span className="block">{person.phone || "—"}</span>
+                    </TableCell>
+                    <TableCell>
+                      <Link href={`/requests?assignedStaffId=${person.id}`}>
+                        <Badge variant="secondary" className="tabular-nums">
+                          {person.activeRequestCount} active
+                        </Badge>
+                      </Link>
+                      <span className="text-muted-foreground mt-0.5 block text-xs">
+                        {person.totalRequestCount} total
+                      </span>
+                    </TableCell>
+                    {canManage && (
+                      <TableCell>
+                        <StaffActions staff={person} departments={departments} />
+                      </TableCell>
+                    )}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </>
+      )}
     </PageShell>
   );
 }

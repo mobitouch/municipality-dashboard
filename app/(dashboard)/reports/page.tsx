@@ -1,140 +1,218 @@
 import Link from "next/link";
-import { readDb } from "@/lib/db";
-import { buildSummary } from "@/lib/reports";
-import PageShell from "@/components/PageShell";
-import BarChartCard from "@/components/charts/BarChartCard";
-import StatusPieChart from "@/components/charts/StatusPieChart";
-import MonthlyTrendChart from "@/components/charts/MonthlyTrendChart";
-import StatusBadge from "@/components/StatusBadge";
-import { AlertTriangle } from "lucide-react";
+import type { Metadata } from "next";
+import { AlertTriangleIcon, DownloadIcon } from "lucide-react";
 
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
-}
+import { PageShell } from "@/components/app-shell/page-shell";
+import { StatusBadge } from "@/components/badges";
+import {
+  HorizontalBarChart,
+  MonthlyTrendChart,
+  StatusDonutChart,
+} from "@/components/charts/chart-primitives";
+import { ReportRange } from "@/components/reports/report-range";
+import { buttonVariants } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { requireUser } from "@/lib/auth/dal";
+import { can } from "@/lib/auth/permissions";
+import { buildSummary } from "@/lib/data/reports";
+import { formatDate } from "@/lib/format";
 
+export const metadata: Metadata = { title: "Reports" };
 export const dynamic = "force-dynamic";
 
-export default function ReportsPage() {
-  const db = readDb();
-  const summary = buildSummary(db);
+export default async function ReportsPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const params = await searchParams;
+  const single = (key: string) => {
+    const value = params[key];
+    return (Array.isArray(value) ? value[0] : value) ?? "";
+  };
+
+  const user = await requireUser();
+  const range = { dateFrom: single("dateFrom"), dateTo: single("dateTo") };
+  const summary = buildSummary(range);
+  const canExport = can(user.role, "reports:export");
+
+  const exportQuery = new URLSearchParams(
+    Object.entries(range).filter(([, value]) => value) as [string, string][]
+  );
 
   return (
-    <PageShell title="Reports" subtitle="Performance and volume reporting across all citizen requests">
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h2 className="mb-1 text-sm font-semibold text-slate-800">Requests by Department</h2>
-          <BarChartCard data={summary.byDepartment} horizontal color="#4A6635" />
-        </div>
+    <PageShell
+      title="Reports"
+      subtitle="Volume and performance across every citizen submission"
+      actions={
+        canExport && (
+          <a
+            href={`/api/requests/export?${exportQuery.toString()}`}
+            className={buttonVariants({ variant: "outline", size: "sm" })}
+          >
+            <DownloadIcon />
+            <span className="hidden sm:inline">Export CSV</span>
+          </a>
+        )
+      }
+    >
+      <ReportRange />
 
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h2 className="mb-1 text-sm font-semibold text-slate-800">Requests by Status</h2>
-          <StatusPieChart data={summary.byStatus} />
-        </div>
+      <div className="grid gap-4 lg:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm">Requests by department</CardTitle>
+            <CardDescription>
+              {summary.totals.total.toLocaleString()} submissions in the selected period
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <HorizontalBarChart data={summary.byDepartment} color="var(--chart-1)" />
+          </CardContent>
+        </Card>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-          <div className="mb-1 flex items-baseline justify-between">
-            <h2 className="text-sm font-semibold text-slate-800">Most Common Category</h2>
-            <span className="text-sm font-medium text-koura-secondary">{summary.mostCommonCategory}</span>
-          </div>
-          <BarChartCard data={summary.byCategory} horizontal color="#8B5A2B" />
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm">Requests by status</CardTitle>
+            <CardDescription>Where the current caseload sits</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <StatusDonutChart data={summary.byStatus} />
+          </CardContent>
+        </Card>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-          <div className="mb-1 flex items-baseline justify-between">
-            <h2 className="text-sm font-semibold text-slate-800">Resolution Performance</h2>
-            <span className="text-sm font-medium text-slate-500">
-              Overall avg: {summary.totals.avgResolutionDays}d
-            </span>
-          </div>
-          <p className="mb-3 text-xs text-slate-500">Average days to resolve, by department</p>
-          <BarChartCard
-            data={summary.resolutionPerformance.map((r) => ({ name: r.name, count: r.avgDays }))}
-            horizontal
-            color="#748047"
-          />
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm">Requests by category</CardTitle>
+            <CardDescription>
+              Most common: <span className="text-foreground font-medium">{summary.mostCommonCategory}</span>
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <HorizontalBarChart data={summary.byCategory} color="var(--chart-2)" />
+          </CardContent>
+        </Card>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm lg:col-span-2">
-          <h2 className="mb-1 text-sm font-semibold text-slate-800">Requests Received per Month</h2>
-          <MonthlyTrendChart data={summary.perMonth} />
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm">Resolution performance</CardTitle>
+            <CardDescription>
+              Average days to resolve, by department — overall {summary.totals.avgResolutionDays}d
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <HorizontalBarChart
+              data={summary.resolutionPerformance.map((entry) => ({
+                name: entry.name,
+                count: entry.avgDays,
+              }))}
+              color="var(--chart-3)"
+              valueLabel="Avg. days"
+            />
+          </CardContent>
+        </Card>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm lg:col-span-2">
-          <div className="mb-3 flex items-center gap-2">
-            <AlertTriangle className="h-4 w-4 text-red-600" />
-            <h2 className="text-sm font-semibold text-slate-800">Urgent Unresolved Requests</h2>
-            <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
-              {summary.urgentUnresolved.length}
-            </span>
-          </div>
-          {summary.urgentUnresolved.length === 0 ? (
-            <p className="py-6 text-center text-sm text-slate-400">No urgent unresolved requests. 🎉</p>
-          ) : (
-            <>
-              {/* Mobile card list */}
-              <div className="space-y-2.5 md:hidden">
-                {summary.urgentUnresolved.map((r) => (
-                  <Link
-                    key={r.id}
-                    href={`/requests/${r.id}`}
-                    className="block rounded-lg border border-slate-200 p-3 transition-colors hover:border-koura-primary/30 active:bg-koura-bg"
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="min-w-0">
-                        <p className="font-medium text-koura-primary">{r.referenceNumber}</p>
-                        <p className="mt-0.5 truncate text-sm text-slate-700">{r.citizenName}</p>
-                      </div>
-                      <StatusBadge status={r.status} />
-                    </div>
-                    <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500">
-                      <span>{r.category}</span>
-                      <span className="text-slate-300">·</span>
-                      <span>{r.departmentName}</span>
-                      <span className="text-slate-300">·</span>
-                      <span>{formatDate(r.dateSubmitted)}</span>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle className="text-sm">Received and resolved per month</CardTitle>
+            <CardDescription>
+              A widening gap between the two lines means the backlog is growing.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <MonthlyTrendChart data={summary.perMonth} />
+          </CardContent>
+        </Card>
 
-              {/* Desktop table */}
-              <div className="hidden overflow-hidden rounded-lg border border-slate-200 md:block">
-                <div className="overflow-x-auto">
-                <table className="w-full min-w-[700px] text-left text-sm">
-                  <thead className="border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
-                    <tr>
-                      <th className="px-4 py-2.5 font-medium">Reference</th>
-                      <th className="px-4 py-2.5 font-medium">Citizen</th>
-                      <th className="px-4 py-2.5 font-medium">Category</th>
-                      <th className="px-4 py-2.5 font-medium">Department</th>
-                      <th className="px-4 py-2.5 font-medium">Status</th>
-                      <th className="px-4 py-2.5 font-medium">Submitted</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    {summary.urgentUnresolved.map((r) => (
-                      <tr key={r.id} className="hover:bg-slate-50">
-                        <td className="px-4 py-2.5">
-                          <Link href={`/requests/${r.id}`} className="font-medium text-koura-primary hover:underline">
-                            {r.referenceNumber}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm">By priority</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <HorizontalBarChart data={summary.byPriority} color="var(--chart-5)" height={170} />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm">By intake channel</CardTitle>
+            <CardDescription>How citizens are reaching the municipality</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <HorizontalBarChart data={summary.bySource} color="var(--chart-4)" height={170} />
+          </CardContent>
+        </Card>
+
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-sm">
+              <AlertTriangleIcon className="text-destructive size-4" />
+              Urgent and unresolved
+              <span className="bg-destructive/10 text-destructive rounded-full px-2 py-0.5 text-xs font-medium">
+                {summary.urgentUnresolved.length}
+              </span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {summary.urgentUnresolved.length === 0 ? (
+              <p className="text-muted-foreground py-6 text-center text-sm">
+                Nothing urgent is outstanding.
+              </p>
+            ) : (
+              <div className="overflow-hidden rounded-lg border">
+                <Table className="min-w-[44rem]">
+                  <TableHeader>
+                    <TableRow className="bg-muted/40 hover:bg-muted/40">
+                      <TableHead className="w-36">Reference</TableHead>
+                      <TableHead>Citizen</TableHead>
+                      <TableHead>Category</TableHead>
+                      <TableHead>Department</TableHead>
+                      <TableHead className="w-28">Status</TableHead>
+                      <TableHead className="w-32">Submitted</TableHead>
+                      <TableHead className="w-20">Age</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {summary.urgentUnresolved.map((entry) => (
+                      <TableRow key={entry.id}>
+                        <TableCell>
+                          <Link
+                            href={`/requests/${entry.id}`}
+                            className="text-primary font-medium hover:underline"
+                          >
+                            {entry.referenceNumber}
                           </Link>
-                        </td>
-                        <td className="px-4 py-2.5 text-slate-700">{r.citizenName}</td>
-                        <td className="px-4 py-2.5 text-slate-600">{r.category}</td>
-                        <td className="px-4 py-2.5 text-slate-600">{r.departmentName}</td>
-                        <td className="px-4 py-2.5">
-                          <StatusBadge status={r.status} />
-                        </td>
-                        <td className="px-4 py-2.5 text-slate-500">{formatDate(r.dateSubmitted)}</td>
-                      </tr>
+                        </TableCell>
+                        <TableCell>{entry.citizenName}</TableCell>
+                        <TableCell className="text-muted-foreground">{entry.category}</TableCell>
+                        <TableCell className="text-muted-foreground">
+                          {entry.departmentName}
+                        </TableCell>
+                        <TableCell>
+                          <StatusBadge status={entry.status} />
+                        </TableCell>
+                        <TableCell className="text-muted-foreground">
+                          {formatDate(entry.dateSubmitted)}
+                        </TableCell>
+                        <TableCell className="text-muted-foreground tabular-nums">
+                          {entry.ageDays}d
+                        </TableCell>
+                      </TableRow>
                     ))}
-                  </tbody>
-                </table>
-                </div>
+                  </TableBody>
+                </Table>
               </div>
-            </>
-          )}
-        </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </PageShell>
   );

@@ -1,115 +1,107 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { readDb, writeDb, nextReferenceNumber, newId } from "@/lib/db";
-import { hasSession, hasApiKey } from "@/lib/auth";
-import { CATEGORIES } from "@/lib/constants";
-import { filterRequests } from "@/lib/requests";
-import type { CitizenRequest, RequestSource } from "@/lib/types";
 
-const VALID_SOURCES: RequestSource[] = ["website", "chatbot", "phone", "walk-in"];
+import { authenticate, unauthorized } from "@/lib/auth/request-auth";
+import { can } from "@/lib/auth/permissions";
+import { findCategoryByName } from "@/lib/data/categories";
+import { createRequest, listRequests, type RequestSort } from "@/lib/data/requests";
+import { externalRequestSchema } from "@/lib/validation";
+import { DEFAULT_PAGE_SIZE } from "@/lib/constants";
+import type { RequestKind } from "@/lib/types";
 
-function isValidSource(value: unknown): value is RequestSource {
-  return typeof value === "string" && (VALID_SOURCES as string[]).includes(value);
-}
-
-// Mirrors scripts/seed.mjs's sourceLabel() so live-created requests read the
-// same way as seeded demo ones.
-function sourceLabel(source: RequestSource): string {
-  if (source === "chatbot") return "Citizen (via chatbot)";
-  if (source === "website") return "Citizen (via website)";
-  if (source === "phone") return "Citizen (via phone)";
-  return "Citizen (walk-in)";
-}
+export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
-  if (!hasSession(request)) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const caller = authenticate(request);
+  if (!caller) return unauthorized();
 
-  const db = readDb();
   const params = request.nextUrl.searchParams;
-  const results = filterRequests(db.requests, {
-    kind: (params.get("kind") as CitizenRequest["kind"]) ?? undefined,
+  const results = listRequests({
+    kind: (params.get("kind") as RequestKind) || undefined,
     status: params.get("status") ?? undefined,
     departmentId: params.get("departmentId") ?? undefined,
-    category: params.get("category") ?? undefined,
+    categoryId: params.get("categoryId") ?? undefined,
+    assignedStaffId: params.get("assignedStaffId") ?? undefined,
     priority: params.get("priority") ?? undefined,
     q: params.get("q") ?? undefined,
     dateFrom: params.get("dateFrom") ?? undefined,
     dateTo: params.get("dateTo") ?? undefined,
+    sort: (params.get("sort") as RequestSort) || undefined,
+    page: Number(params.get("page")) || 1,
+    pageSize: Number(params.get("pageSize")) || DEFAULT_PAGE_SIZE,
   });
 
-  return NextResponse.json({ requests: results });
+  return NextResponse.json(results);
 }
 
+/**
+ * The intake endpoint. The municipal website's Contact and "Report an
+ * Issue" forms post here server-to-server, as does the n8n chatbot flow.
+ */
 export async function POST(request: NextRequest) {
-  const authorized = hasSession(request) || hasApiKey(request);
-  if (!authorized) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const caller = authenticate(request);
+  if (!caller) return unauthorized();
+
+  if (caller.kind === "session" && !can(caller.user.role, "requests:create")) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
   const body = await request.json().catch(() => null);
-  if (!body || !body.citizenName || !body.category || !body.description) {
+  if (!body) {
+    return NextResponse.json({ error: "Expected a JSON body." }, { status: 400 });
+  }
+
+  const parsed = externalRequestSchema.safeParse(body);
+  if (!parsed.success) {
     return NextResponse.json(
-      { error: "citizenName, category, and description are required" },
+      {
+        error: "Validation failed.",
+        details: parsed.error.issues.map((issue) => ({
+          field: issue.path.join("."),
+          message: issue.message,
+        })),
+      },
       { status: 400 }
     );
   }
 
-  const db = readDb();
-  const categoryDef = CATEGORIES.find((c) => c.name === body.category);
-  const now = new Date().toISOString();
-  // An explicit, valid source (e.g. "website" from the live municipal site)
-  // is always respected. Only fall back to inferring from the auth method
-  // when the caller didn't specify one — this keeps n8n's existing default
-  // ("chatbot", since it authenticates via API key with no session) intact.
-  const source: RequestSource = isValidSource(body.source)
-    ? body.source
-    : hasApiKey(request) && !hasSession(request)
-      ? "chatbot"
-      : "website";
+  const category = findCategoryByName(parsed.data.category);
+  if (!category) {
+    return NextResponse.json(
+      { error: `Unknown category "${parsed.data.category}".` },
+      { status: 400 }
+    );
+  }
+  if (!category.isActive) {
+    return NextResponse.json(
+      { error: `Category "${category.name}" is no longer accepting submissions.` },
+      { status: 400 }
+    );
+  }
 
-  const newRequest: CitizenRequest = {
-    id: newId("req"),
-    referenceNumber: nextReferenceNumber(db),
-    kind: body.kind === "complaint" || body.kind === "request" ? body.kind : categoryDef?.kind ?? "request",
-    citizenName: body.citizenName,
-    phone: body.phone ?? "",
-    category: body.category,
-    departmentId: body.departmentId ?? null,
-    location: body.location ?? "",
-    description: body.description,
-    dateSubmitted: now,
-    priority: body.priority ?? "Normal",
-    status: "New",
-    assignedStaffId: null,
-    attachedImage: body.attachedImage ?? null,
-    internalNotes: [],
-    activityHistory: [
-      {
-        id: newId("act"),
-        timestamp: now,
-        actor: sourceLabel(source),
-        action: "Request submitted",
-        detail: categoryDef
-          ? `New request received and logged in the system (suggested department: ${categoryDef.defaultDepartmentId}).`
-          : "New request received and logged in the system.",
-      },
-    ],
-    source,
-    resolvedAt: null,
-  };
+  // An explicit source always wins; otherwise key-authenticated callers are
+  // the chatbot by convention, matching the existing n8n workflow.
+  const source =
+    parsed.data.source ?? (caller.kind === "apiKey" ? "chatbot" : "staff");
 
-  db.requests.push(newRequest);
-  db.notifications.unshift({
-    id: newId("notif"),
-    timestamp: now,
-    recipient: newRequest.citizenName,
-    channel: source === "phone" ? "SMS" : "Email",
-    message: `Your request ${newRequest.referenceNumber} ("${newRequest.category}") has been received and logged.`,
-    relatedRequestId: newRequest.id,
-  });
-  writeDb(db);
+  const actor =
+    caller.kind === "session" ? caller.user.name : `Integration (${caller.label})`;
 
-  return NextResponse.json({ request: newRequest }, { status: 201 });
+  const created = createRequest(
+    {
+      kind: parsed.data.kind ?? category.kind,
+      citizenName: parsed.data.citizenName,
+      phone: parsed.data.phone,
+      email: parsed.data.email,
+      categoryId: category.id,
+      location: parsed.data.location,
+      description: parsed.data.description,
+      priority: parsed.data.priority,
+      source,
+      attachedImage: parsed.data.attachedImage ?? null,
+    },
+    actor
+  );
+
+  return NextResponse.json({ request: created }, { status: 201 });
 }

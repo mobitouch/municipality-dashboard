@@ -1,12 +1,26 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { readDb } from "@/lib/db";
-import { hasSession } from "@/lib/auth";
+
+import { authenticate, requireSession, unauthorized } from "@/lib/auth/request-auth";
+import { listStaff } from "@/lib/data/staff";
+
+export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
-  if (!hasSession(request)) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const caller = authenticate(request);
+  if (!caller) return unauthorized();
+
+  // Staff contact details are internal, so integration keys don't get them.
+  if (!requireSession(caller)) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
-  const db = readDb();
-  return NextResponse.json({ staff: db.staff });
+
+  const params = request.nextUrl.searchParams;
+  return NextResponse.json({
+    staff: listStaff({
+      departmentId: params.get("departmentId") ?? undefined,
+      q: params.get("q") ?? undefined,
+      includeInactive: params.get("includeInactive") === "true",
+    }),
+  });
 }

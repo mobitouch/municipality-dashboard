@@ -1,85 +1,39 @@
-"use client";
+import { redirect } from "next/navigation";
+import { Landmark } from "lucide-react";
+import type { Metadata } from "next";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Building2, Landmark } from "lucide-react";
-import { DEMO_CREDENTIALS } from "@/lib/constants";
+import { LoginForm } from "./login-form";
+import { getCurrentUser } from "@/lib/auth/dal";
+import { getSettings } from "@/lib/data/settings";
+import { env } from "@/lib/env";
 
-export default function LoginPage() {
-  const router = useRouter();
-  const [username, setUsername] = useState(DEMO_CREDENTIALS.username);
-  const [password, setPassword] = useState(DEMO_CREDENTIALS.password);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+export const metadata: Metadata = { title: "Sign in" };
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-    const res = await fetch("/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
-    setLoading(false);
-    if (res.ok) {
-      router.push("/overview");
-      router.refresh();
-    } else {
-      setError("Invalid credentials. Use the demo credentials shown below.");
-    }
-  }
+export default async function LoginPage() {
+  if (await getCurrentUser()) redirect("/overview");
+
+  const settings = getSettings();
 
   return (
-    <div className="flex flex-1 items-center justify-center bg-gradient-to-br from-koura-text via-[#3b4c2d] to-koura-primary px-4 py-12">
+    <div className="from-sidebar to-primary flex flex-1 items-center justify-center bg-gradient-to-br via-[oklch(0.32_0.03_130)] px-4 py-12">
       <div className="w-full max-w-md">
-        <div className="mb-8 flex flex-col items-center text-center text-white">
-          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-white/20">
-            <Landmark className="h-7 w-7" />
+        <div className="mb-7 flex flex-col items-center text-center text-white">
+          <div className="mb-4 flex size-14 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-white/20">
+            <Landmark className="size-7" />
           </div>
-          <h1 className="text-xl font-semibold tracking-tight">MobiTouch Municipality</h1>
-          <p className="mt-1 text-sm text-slate-300">Staff Dashboard</p>
+          <h1 className="text-xl font-semibold tracking-tight">{settings.organisationName}</h1>
+          <p className="mt-1 text-sm text-white/70">Staff Dashboard</p>
         </div>
 
-        <div className="rounded-2xl bg-white p-6 shadow-xl sm:p-8">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">
-                Username
-              </label>
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-koura-primary focus:outline-none focus:ring-2 focus:ring-koura-primary/20"
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">
-                Password
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-koura-primary focus:outline-none focus:ring-2 focus:ring-koura-primary/20"
-              />
-            </div>
-            {error && <p className="text-sm text-rose-600">{error}</p>}
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-koura-primary px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-koura-primary/90 disabled:opacity-60"
-            >
-              <Building2 className="h-4 w-4" />
-              {loading ? "Signing in..." : "Sign in"}
-            </button>
-          </form>
-
-          <div className="mt-6 rounded-lg bg-slate-50 p-3 text-center text-xs text-slate-500">
-            Demo credentials are pre-filled — just click Sign in.
-          </div>
+        <div className="bg-card rounded-2xl border p-6 shadow-xl sm:p-8">
+          <LoginForm />
         </div>
+
+        {!env.isProduction && (
+          <p className="mt-4 text-center text-xs text-white/60">
+            Development build — the bootstrap administrator is {env.ADMIN_EMAIL}
+          </p>
+        )}
       </div>
     </div>
   );

@@ -1,31 +1,22 @@
-import { readDb } from "@/lib/db";
-import { filterRequests } from "@/lib/requests";
-import { CATEGORIES } from "@/lib/constants";
-import PageShell from "@/components/PageShell";
-import RequestFilters from "@/components/RequestFilters";
-import RequestsTable from "@/components/RequestsTable";
-import AutoRefresh from "@/components/AutoRefresh";
+import type { Metadata } from "next";
 
+import { RequestListPage, type SearchParams } from "@/components/requests/request-list-page";
+
+export const metadata: Metadata = { title: "Citizen Requests" };
 export const dynamic = "force-dynamic";
 
 export default async function RequestsPage({
   searchParams,
 }: {
-  searchParams: Promise<Record<string, string | undefined>>;
+  searchParams: Promise<SearchParams>;
 }) {
-  const params = await searchParams;
-  const db = readDb();
-  const results = filterRequests(db.requests, { ...params, kind: "request" });
-  const categories = CATEGORIES.filter((c) => c.kind === "request").map((c) => c.name);
-
   return (
-    <PageShell
+    <RequestListPage
+      kind="request"
+      basePath="/requests"
       title="Citizen Requests"
-      subtitle={`${results.length} of ${db.requests.filter((r) => r.kind === "request").length} requests`}
-    >
-      <AutoRefresh />
-      <RequestFilters departments={db.departments} categories={categories} />
-      <RequestsTable requests={results} departments={db.departments} basePath="/requests" />
-    </PageShell>
+      subtitle="Service requests raised by residents."
+      searchParams={await searchParams}
+    />
   );
 }
