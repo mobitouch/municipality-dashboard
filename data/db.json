@@ -1,0 +1,1451 @@
+{
+  "departments": [
+    {
+      "id": "dept-public-works",
+      "name": "Public Works",
+      "headOfDepartment": "Rania Haddad",
+      "description": "Roads, street lighting, and public infrastructure maintenance."
+    },
+    {
+      "id": "dept-sanitation",
+      "name": "Sanitation Services",
+      "headOfDepartment": "Maria Abi Saab",
+      "description": "Waste collection, street cleaning, and illegal dumping response."
+    },
+    {
+      "id": "dept-water",
+      "name": "Water & Sewage Authority",
+      "headOfDepartment": "Maya Khoury",
+      "description": "Water supply, leakage repair, and sewage network maintenance."
+    },
+    {
+      "id": "dept-parks",
+      "name": "Parks & Environment",
+      "headOfDepartment": "Sami Abou Rjeily",
+      "description": "Parks, green spaces, and tree maintenance."
+    },
+    {
+      "id": "dept-code-enforcement",
+      "name": "Code Enforcement",
+      "headOfDepartment": "Nadine Chami",
+      "description": "Noise, zoning, and municipal code compliance."
+    },
+    {
+      "id": "dept-permits",
+      "name": "Permits & Licensing Office",
+      "headOfDepartment": "Georges Matta",
+      "description": "Building permits, business licenses, and municipal authorizations."
+    },
+    {
+      "id": "dept-public-safety",
+      "name": "Public Safety",
+      "headOfDepartment": "Elias Nakhle",
+      "description": "Emergency response coordination and public safety concerns."
+    },
+    {
+      "id": "dept-admin",
+      "name": "Administration",
+      "headOfDepartment": "Layla Saade",
+      "description": "General administration and citizen services coordination."
+    }
+  ],
+  "staff": [
+    {
+      "id": "staff-karim",
+      "name": "Karim Yazbeck",
+      "role": "Field Technician",
+      "departmentId": "dept-public-works",
+      "email": "karim.yazbeck@mobitouch.demo",
+      "phone": "+961 70 112 233"
+    },
+    {
+      "id": "staff-rania",
+      "name": "Rania Haddad",
+      "role": "Field Supervisor",
+      "departmentId": "dept-public-works",
+      "email": "rania.haddad@mobitouch.demo",
+      "phone": "+961 71 223 344"
+    },
+    {
+      "id": "staff-tarek",
+      "name": "Tarek Zeidan",
+      "role": "Electrician",
+      "departmentId": "dept-public-works",
+      "email": "tarek.zeidan@mobitouch.demo",
+      "phone": "+961 76 334 455"
+    },
+    {
+      "id": "staff-walid",
+      "name": "Walid Fares",
+      "role": "Field Technician",
+      "departmentId": "dept-sanitation",
+      "email": "walid.fares@mobitouch.demo",
+      "phone": "+961 70 445 566"
+    },
+    {
+      "id": "staff-maria",
+      "name": "Maria Abi Saab",
+      "role": "Operations Coordinator",
+      "departmentId": "dept-sanitation",
+      "email": "maria.abisaab@mobitouch.demo",
+      "phone": "+961 71 556 677"
+    },
+    {
+      "id": "staff-maya",
+      "name": "Maya Khoury",
+      "role": "Civil Engineer",
+      "departmentId": "dept-water",
+      "email": "maya.khoury@mobitouch.demo",
+      "phone": "+961 76 667 788"
+    },
+    {
+      "id": "staff-joseph",
+      "name": "Joseph Rahme",
+      "role": "Field Technician",
+      "departmentId": "dept-water",
+      "email": "joseph.rahme@mobitouch.demo",
+      "phone": "+961 70 778 899"
+    },
+    {
+      "id": "staff-sami",
+      "name": "Sami Abou Rjeily",
+      "role": "Parks Technician",
+      "departmentId": "dept-parks",
+      "email": "sami.abourjeily@mobitouch.demo",
+      "phone": "+961 71 889 900"
+    },
+    {
+      "id": "staff-nadine",
+      "name": "Nadine Chami",
+      "role": "Code Inspector",
+      "departmentId": "dept-code-enforcement",
+      "email": "nadine.chami@mobitouch.demo",
+      "phone": "+961 76 990 011"
+    },
+    {
+      "id": "staff-georges",
+      "name": "Georges Matta",
+      "role": "Permits Officer",
+      "departmentId": "dept-permits",
+      "email": "georges.matta@mobitouch.demo",
+      "phone": "+961 70 101 202"
+    },
+    {
+      "id": "staff-elias",
+      "name": "Elias Nakhle",
+      "role": "Public Safety Officer",
+      "departmentId": "dept-public-safety",
+      "email": "elias.nakhle@mobitouch.demo",
+      "phone": "+961 71 212 303"
+    },
+    {
+      "id": "staff-layla",
+      "name": "Layla Saade",
+      "role": "Administration Coordinator",
+      "departmentId": "dept-admin",
+      "email": "layla.saade@mobitouch.demo",
+      "phone": "+961 76 323 404"
+    }
+  ],
+  "requests": [
+    {
+      "id": "req-0007",
+      "referenceNumber": "REQ-2026-0001",
+      "kind": "request",
+      "citizenName": "Nadia Karam",
+      "phone": "+961 3 101 010",
+      "category": "Roads & Potholes",
+      "departmentId": "dept-public-works",
+      "location": "Hamra Street, near the pharmacy",
+      "description": "A large pothole has formed in the middle of the road, causing damage to passing vehicles.",
+      "dateSubmitted": "2026-02-03T09:00:00.000Z",
+      "priority": "Normal",
+      "status": "Closed",
+      "assignedStaffId": "staff-karim",
+      "attachedImage": "/demo/pothole.svg",
+      "internalNotes": [],
+      "activityHistory": [
+        {
+          "id": "act-0001",
+          "timestamp": "2026-02-03T09:00:00.000Z",
+          "actor": "Citizen (via website)",
+          "action": "Request submitted",
+          "detail": "New request received and logged in the system."
+        },
+        {
+          "id": "act-0002",
+          "timestamp": "2026-02-03T13:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "New -> Under Review"
+        },
+        {
+          "id": "act-0003",
+          "timestamp": "2026-02-04T05:00:00.000Z",
+          "actor": "Dispatcher",
+          "action": "Assigned",
+          "detail": "Assigned to Public Works — Karim Yazbeck"
+        },
+        {
+          "id": "act-0004",
+          "timestamp": "2026-02-04T06:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "Under Review -> Assigned"
+        },
+        {
+          "id": "act-0005",
+          "timestamp": "2026-02-04T15:00:00.000Z",
+          "actor": "Karim Yazbeck",
+          "action": "Status changed",
+          "detail": "Assigned -> In Progress"
+        },
+        {
+          "id": "act-0006",
+          "timestamp": "2026-02-10T19:00:00.000Z",
+          "actor": "Karim Yazbeck",
+          "action": "Status changed",
+          "detail": "In Progress -> Closed"
+        }
+      ],
+      "source": "website",
+      "resolvedAt": "2026-02-11T19:00:00.000Z"
+    },
+    {
+      "id": "req-0014",
+      "referenceNumber": "REQ-2026-0002",
+      "kind": "complaint",
+      "citizenName": "Elie Boutros",
+      "phone": "+961 3 202 020",
+      "category": "Waste Collection",
+      "departmentId": "dept-sanitation",
+      "location": "Furn El Chebbak main road",
+      "description": "Garbage has not been collected in this area for several days, the bins are overflowing.",
+      "dateSubmitted": "2026-02-18T09:00:00.000Z",
+      "priority": "High",
+      "status": "Resolved",
+      "assignedStaffId": "staff-walid",
+      "attachedImage": null,
+      "internalNotes": [],
+      "activityHistory": [
+        {
+          "id": "act-0008",
+          "timestamp": "2026-02-18T09:00:00.000Z",
+          "actor": "Citizen (via website)",
+          "action": "Request submitted",
+          "detail": "New request received and logged in the system."
+        },
+        {
+          "id": "act-0009",
+          "timestamp": "2026-02-18T13:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "New -> Under Review"
+        },
+        {
+          "id": "act-0010",
+          "timestamp": "2026-02-19T05:00:00.000Z",
+          "actor": "Dispatcher",
+          "action": "Assigned",
+          "detail": "Assigned to Sanitation Services — Walid Fares"
+        },
+        {
+          "id": "act-0011",
+          "timestamp": "2026-02-19T06:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "Under Review -> Assigned"
+        },
+        {
+          "id": "act-0012",
+          "timestamp": "2026-02-19T15:00:00.000Z",
+          "actor": "Walid Fares",
+          "action": "Status changed",
+          "detail": "Assigned -> In Progress"
+        },
+        {
+          "id": "act-0013",
+          "timestamp": "2026-02-21T19:00:00.000Z",
+          "actor": "Walid Fares",
+          "action": "Status changed",
+          "detail": "In Progress -> Resolved"
+        }
+      ],
+      "source": "website",
+      "resolvedAt": "2026-02-22T19:00:00.000Z"
+    },
+    {
+      "id": "req-0021",
+      "referenceNumber": "REQ-2026-0003",
+      "kind": "request",
+      "citizenName": "Rita Saliba",
+      "phone": "+961 3 303 030",
+      "category": "Water & Sewage",
+      "departmentId": "dept-water",
+      "location": "Verdun, Rue Verdun 730",
+      "description": "There is a continuous water leak from an underground pipe, water is pooling on the street.",
+      "dateSubmitted": "2026-03-02T09:00:00.000Z",
+      "priority": "Urgent",
+      "status": "Resolved",
+      "assignedStaffId": "staff-joseph",
+      "attachedImage": "/demo/water-leak.svg",
+      "internalNotes": [],
+      "activityHistory": [
+        {
+          "id": "act-0015",
+          "timestamp": "2026-03-02T09:00:00.000Z",
+          "actor": "Citizen (via phone)",
+          "action": "Request submitted",
+          "detail": "New request received and logged in the system."
+        },
+        {
+          "id": "act-0016",
+          "timestamp": "2026-03-02T13:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "New -> Under Review"
+        },
+        {
+          "id": "act-0017",
+          "timestamp": "2026-03-03T05:00:00.000Z",
+          "actor": "Dispatcher",
+          "action": "Assigned",
+          "detail": "Assigned to Water & Sewage Authority — Joseph Rahme"
+        },
+        {
+          "id": "act-0018",
+          "timestamp": "2026-03-03T06:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "Under Review -> Assigned"
+        },
+        {
+          "id": "act-0019",
+          "timestamp": "2026-03-03T15:00:00.000Z",
+          "actor": "Joseph Rahme",
+          "action": "Status changed",
+          "detail": "Assigned -> In Progress"
+        },
+        {
+          "id": "act-0020",
+          "timestamp": "2026-03-05T19:00:00.000Z",
+          "actor": "Joseph Rahme",
+          "action": "Status changed",
+          "detail": "In Progress -> Resolved"
+        }
+      ],
+      "source": "phone",
+      "resolvedAt": "2026-03-06T19:00:00.000Z"
+    },
+    {
+      "id": "req-0028",
+      "referenceNumber": "REQ-2026-0004",
+      "kind": "request",
+      "citizenName": "Fadi Chalhoub",
+      "phone": "+961 3 404 040",
+      "category": "Permits & Licensing",
+      "departmentId": "dept-permits",
+      "location": "Municipality front desk",
+      "description": "Citizen is asking about the requirements and steps to renew a commercial business license.",
+      "dateSubmitted": "2026-03-14T09:00:00.000Z",
+      "priority": "Low",
+      "status": "Closed",
+      "assignedStaffId": "staff-georges",
+      "attachedImage": null,
+      "internalNotes": [],
+      "activityHistory": [
+        {
+          "id": "act-0022",
+          "timestamp": "2026-03-14T09:00:00.000Z",
+          "actor": "Citizen (walk-in)",
+          "action": "Request submitted",
+          "detail": "New request received and logged in the system."
+        },
+        {
+          "id": "act-0023",
+          "timestamp": "2026-03-14T13:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "New -> Under Review"
+        },
+        {
+          "id": "act-0024",
+          "timestamp": "2026-03-15T05:00:00.000Z",
+          "actor": "Dispatcher",
+          "action": "Assigned",
+          "detail": "Assigned to Permits & Licensing Office — Georges Matta"
+        },
+        {
+          "id": "act-0025",
+          "timestamp": "2026-03-15T06:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "Under Review -> Assigned"
+        },
+        {
+          "id": "act-0026",
+          "timestamp": "2026-03-15T15:00:00.000Z",
+          "actor": "Georges Matta",
+          "action": "Status changed",
+          "detail": "Assigned -> In Progress"
+        },
+        {
+          "id": "act-0027",
+          "timestamp": "2026-03-15T19:00:00.000Z",
+          "actor": "Georges Matta",
+          "action": "Status changed",
+          "detail": "In Progress -> Closed"
+        }
+      ],
+      "source": "walk-in",
+      "resolvedAt": "2026-03-16T19:00:00.000Z"
+    },
+    {
+      "id": "req-0031",
+      "referenceNumber": "REQ-2026-0005",
+      "kind": "complaint",
+      "citizenName": "Hala Naccache",
+      "phone": "+961 3 505 050",
+      "category": "Illegal Dumping",
+      "departmentId": "dept-sanitation",
+      "location": "Jisr El Wati, industrial zone",
+      "description": "Construction debris and household waste is being dumped on the empty lot next to the building.",
+      "dateSubmitted": "2026-03-25T09:00:00.000Z",
+      "priority": "High",
+      "status": "Rejected",
+      "assignedStaffId": null,
+      "attachedImage": null,
+      "internalNotes": [],
+      "activityHistory": [
+        {
+          "id": "act-0029",
+          "timestamp": "2026-03-25T09:00:00.000Z",
+          "actor": "Citizen (via website)",
+          "action": "Request submitted",
+          "detail": "New request received and logged in the system."
+        },
+        {
+          "id": "act-0030",
+          "timestamp": "2026-03-26T07:00:00.000Z",
+          "actor": "Sanitation Services",
+          "action": "Status changed",
+          "detail": "New -> Rejected. Reason: Location falls outside municipal boundary; forwarded to regional authority."
+        }
+      ],
+      "source": "website",
+      "resolvedAt": null
+    },
+    {
+      "id": "req-0039",
+      "referenceNumber": "REQ-2026-0006",
+      "kind": "complaint",
+      "citizenName": "Antoine Freij",
+      "phone": "+961 3 606 060",
+      "category": "Noise Complaints",
+      "departmentId": "dept-code-enforcement",
+      "location": "Mar Mikhael, behind the church",
+      "description": "Excessive noise from a nearby workshop late at night is disturbing residents.",
+      "dateSubmitted": "2026-04-04T09:00:00.000Z",
+      "priority": "Normal",
+      "status": "Resolved",
+      "assignedStaffId": "staff-nadine",
+      "attachedImage": null,
+      "internalNotes": [
+        {
+          "id": "note-0038",
+          "author": "Nadine Chami",
+          "timestamp": "2026-04-09T01:00:00.000Z",
+          "note": "Workshop owner issued a formal warning and agreed to stop after 8 PM."
+        }
+      ],
+      "activityHistory": [
+        {
+          "id": "act-0032",
+          "timestamp": "2026-04-04T09:00:00.000Z",
+          "actor": "Citizen (via phone)",
+          "action": "Request submitted",
+          "detail": "New request received and logged in the system."
+        },
+        {
+          "id": "act-0033",
+          "timestamp": "2026-04-04T13:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "New -> Under Review"
+        },
+        {
+          "id": "act-0034",
+          "timestamp": "2026-04-05T05:00:00.000Z",
+          "actor": "Dispatcher",
+          "action": "Assigned",
+          "detail": "Assigned to Code Enforcement — Nadine Chami"
+        },
+        {
+          "id": "act-0035",
+          "timestamp": "2026-04-05T06:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "Under Review -> Assigned"
+        },
+        {
+          "id": "act-0036",
+          "timestamp": "2026-04-05T15:00:00.000Z",
+          "actor": "Nadine Chami",
+          "action": "Status changed",
+          "detail": "Assigned -> In Progress"
+        },
+        {
+          "id": "act-0037",
+          "timestamp": "2026-04-07T19:00:00.000Z",
+          "actor": "Nadine Chami",
+          "action": "Status changed",
+          "detail": "In Progress -> Resolved"
+        }
+      ],
+      "source": "phone",
+      "resolvedAt": "2026-04-08T19:00:00.000Z"
+    },
+    {
+      "id": "req-0046",
+      "referenceNumber": "REQ-2026-0007",
+      "kind": "request",
+      "citizenName": "Sarah Moussa",
+      "phone": "+961 3 707 070",
+      "category": "Street Lighting",
+      "departmentId": "dept-public-works",
+      "location": "Gemmayze, Rue Gouraud",
+      "description": "Streetlight has been flickering and turning off intermittently for the past two weeks.",
+      "dateSubmitted": "2026-04-12T09:00:00.000Z",
+      "priority": "Normal",
+      "status": "Closed",
+      "assignedStaffId": "staff-rania",
+      "attachedImage": null,
+      "internalNotes": [],
+      "activityHistory": [
+        {
+          "id": "act-0040",
+          "timestamp": "2026-04-12T09:00:00.000Z",
+          "actor": "Citizen (via website)",
+          "action": "Request submitted",
+          "detail": "New request received and logged in the system."
+        },
+        {
+          "id": "act-0041",
+          "timestamp": "2026-04-12T13:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "New -> Under Review"
+        },
+        {
+          "id": "act-0042",
+          "timestamp": "2026-04-13T05:00:00.000Z",
+          "actor": "Dispatcher",
+          "action": "Assigned",
+          "detail": "Assigned to Public Works — Rania Haddad"
+        },
+        {
+          "id": "act-0043",
+          "timestamp": "2026-04-13T06:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "Under Review -> Assigned"
+        },
+        {
+          "id": "act-0044",
+          "timestamp": "2026-04-13T15:00:00.000Z",
+          "actor": "Rania Haddad",
+          "action": "Status changed",
+          "detail": "Assigned -> In Progress"
+        },
+        {
+          "id": "act-0045",
+          "timestamp": "2026-04-16T19:00:00.000Z",
+          "actor": "Rania Haddad",
+          "action": "Status changed",
+          "detail": "In Progress -> Closed"
+        }
+      ],
+      "source": "website",
+      "resolvedAt": "2026-04-17T19:00:00.000Z"
+    },
+    {
+      "id": "req-0053",
+      "referenceNumber": "REQ-2026-0008",
+      "kind": "request",
+      "citizenName": "Jad Khalil",
+      "phone": "+961 3 808 080",
+      "category": "Parks & Trees",
+      "departmentId": "dept-parks",
+      "location": "Sioufi Garden entrance",
+      "description": "A large tree branch has fallen and is blocking part of the garden entrance after last night's storm.",
+      "dateSubmitted": "2026-04-20T09:00:00.000Z",
+      "priority": "High",
+      "status": "Resolved",
+      "assignedStaffId": "staff-sami",
+      "attachedImage": "/demo/tree.svg",
+      "internalNotes": [],
+      "activityHistory": [
+        {
+          "id": "act-0047",
+          "timestamp": "2026-04-20T09:00:00.000Z",
+          "actor": "Citizen (via website)",
+          "action": "Request submitted",
+          "detail": "New request received and logged in the system."
+        },
+        {
+          "id": "act-0048",
+          "timestamp": "2026-04-20T13:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "New -> Under Review"
+        },
+        {
+          "id": "act-0049",
+          "timestamp": "2026-04-21T05:00:00.000Z",
+          "actor": "Dispatcher",
+          "action": "Assigned",
+          "detail": "Assigned to Parks & Environment — Sami Abou Rjeily"
+        },
+        {
+          "id": "act-0050",
+          "timestamp": "2026-04-21T06:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "Under Review -> Assigned"
+        },
+        {
+          "id": "act-0051",
+          "timestamp": "2026-04-21T15:00:00.000Z",
+          "actor": "Sami Abou Rjeily",
+          "action": "Status changed",
+          "detail": "Assigned -> In Progress"
+        },
+        {
+          "id": "act-0052",
+          "timestamp": "2026-04-23T19:00:00.000Z",
+          "actor": "Sami Abou Rjeily",
+          "action": "Status changed",
+          "detail": "In Progress -> Resolved"
+        }
+      ],
+      "source": "website",
+      "resolvedAt": "2026-04-24T19:00:00.000Z"
+    },
+    {
+      "id": "req-0060",
+      "referenceNumber": "REQ-2026-0009",
+      "kind": "request",
+      "citizenName": "Christelle Aoun",
+      "phone": "+961 3 909 090",
+      "category": "Roads & Potholes",
+      "departmentId": "dept-public-works",
+      "location": "Badaro Street, next to the school",
+      "description": "Multiple potholes near the school entrance are a safety risk for children.",
+      "dateSubmitted": "2026-05-03T09:00:00.000Z",
+      "priority": "Normal",
+      "status": "In Progress",
+      "assignedStaffId": "staff-karim",
+      "attachedImage": null,
+      "internalNotes": [
+        {
+          "id": "note-0059",
+          "author": "Karim Yazbeck",
+          "timestamp": "2026-05-05T01:00:00.000Z",
+          "note": "Materials ordered, repair scheduled for next week."
+        }
+      ],
+      "activityHistory": [
+        {
+          "id": "act-0054",
+          "timestamp": "2026-05-03T09:00:00.000Z",
+          "actor": "Citizen (via website)",
+          "action": "Request submitted",
+          "detail": "New request received and logged in the system."
+        },
+        {
+          "id": "act-0055",
+          "timestamp": "2026-05-03T13:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "New -> Under Review"
+        },
+        {
+          "id": "act-0056",
+          "timestamp": "2026-05-04T05:00:00.000Z",
+          "actor": "Dispatcher",
+          "action": "Assigned",
+          "detail": "Assigned to Public Works — Karim Yazbeck"
+        },
+        {
+          "id": "act-0057",
+          "timestamp": "2026-05-04T06:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "Under Review -> Assigned"
+        },
+        {
+          "id": "act-0058",
+          "timestamp": "2026-05-04T15:00:00.000Z",
+          "actor": "Karim Yazbeck",
+          "action": "Status changed",
+          "detail": "Assigned -> In Progress"
+        }
+      ],
+      "source": "website",
+      "resolvedAt": null
+    },
+    {
+      "id": "req-0066",
+      "referenceNumber": "REQ-2026-0010",
+      "kind": "complaint",
+      "citizenName": "Marc Sfeir",
+      "phone": "+961 3 111 011",
+      "category": "Waste Collection",
+      "departmentId": "dept-sanitation",
+      "location": "Bourj Hammoud, Marash street",
+      "description": "Waste collection has been irregular for the past two weeks in this area.",
+      "dateSubmitted": "2026-05-11T09:00:00.000Z",
+      "priority": "High",
+      "status": "In Progress",
+      "assignedStaffId": "staff-walid",
+      "attachedImage": null,
+      "internalNotes": [],
+      "activityHistory": [
+        {
+          "id": "act-0061",
+          "timestamp": "2026-05-11T09:00:00.000Z",
+          "actor": "Citizen (via phone)",
+          "action": "Request submitted",
+          "detail": "New request received and logged in the system."
+        },
+        {
+          "id": "act-0062",
+          "timestamp": "2026-05-11T13:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "New -> Under Review"
+        },
+        {
+          "id": "act-0063",
+          "timestamp": "2026-05-12T05:00:00.000Z",
+          "actor": "Dispatcher",
+          "action": "Assigned",
+          "detail": "Assigned to Sanitation Services — Walid Fares"
+        },
+        {
+          "id": "act-0064",
+          "timestamp": "2026-05-12T06:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "Under Review -> Assigned"
+        },
+        {
+          "id": "act-0065",
+          "timestamp": "2026-05-12T15:00:00.000Z",
+          "actor": "Walid Fares",
+          "action": "Status changed",
+          "detail": "Assigned -> In Progress"
+        }
+      ],
+      "source": "phone",
+      "resolvedAt": null
+    },
+    {
+      "id": "req-0073",
+      "referenceNumber": "REQ-2026-0011",
+      "kind": "request",
+      "citizenName": "Diala Haddad",
+      "phone": "+961 3 121 212",
+      "category": "Water & Sewage",
+      "departmentId": "dept-water",
+      "location": "Zalka highway service road",
+      "description": "A burst pipe is flooding the service road and affecting traffic.",
+      "dateSubmitted": "2026-05-22T09:00:00.000Z",
+      "priority": "Urgent",
+      "status": "In Progress",
+      "assignedStaffId": "staff-joseph",
+      "attachedImage": "/demo/water-leak.svg",
+      "internalNotes": [
+        {
+          "id": "note-0072",
+          "author": "Joseph Rahme",
+          "timestamp": "2026-05-24T01:00:00.000Z",
+          "note": "Emergency crew dispatched, temporary patch applied, full repair pending parts."
+        }
+      ],
+      "activityHistory": [
+        {
+          "id": "act-0067",
+          "timestamp": "2026-05-22T09:00:00.000Z",
+          "actor": "Citizen (via phone)",
+          "action": "Request submitted",
+          "detail": "New request received and logged in the system."
+        },
+        {
+          "id": "act-0068",
+          "timestamp": "2026-05-22T13:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "New -> Under Review"
+        },
+        {
+          "id": "act-0069",
+          "timestamp": "2026-05-23T05:00:00.000Z",
+          "actor": "Dispatcher",
+          "action": "Assigned",
+          "detail": "Assigned to Water & Sewage Authority — Joseph Rahme"
+        },
+        {
+          "id": "act-0070",
+          "timestamp": "2026-05-23T06:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "Under Review -> Assigned"
+        },
+        {
+          "id": "act-0071",
+          "timestamp": "2026-05-23T15:00:00.000Z",
+          "actor": "Joseph Rahme",
+          "action": "Status changed",
+          "detail": "Assigned -> In Progress"
+        }
+      ],
+      "source": "phone",
+      "resolvedAt": null
+    },
+    {
+      "id": "req-0078",
+      "referenceNumber": "REQ-2026-0012",
+      "kind": "request",
+      "citizenName": "Ziad Rizk",
+      "phone": "+961 3 131 313",
+      "category": "Permits & Licensing",
+      "departmentId": "dept-permits",
+      "location": "Municipality front desk",
+      "description": "Citizen submitted an application for a new outdoor seating permit for a restaurant.",
+      "dateSubmitted": "2026-06-02T09:00:00.000Z",
+      "priority": "Low",
+      "status": "Assigned",
+      "assignedStaffId": "staff-georges",
+      "attachedImage": null,
+      "internalNotes": [],
+      "activityHistory": [
+        {
+          "id": "act-0074",
+          "timestamp": "2026-06-02T09:00:00.000Z",
+          "actor": "Citizen (walk-in)",
+          "action": "Request submitted",
+          "detail": "New request received and logged in the system."
+        },
+        {
+          "id": "act-0075",
+          "timestamp": "2026-06-02T13:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "New -> Under Review"
+        },
+        {
+          "id": "act-0076",
+          "timestamp": "2026-06-03T05:00:00.000Z",
+          "actor": "Dispatcher",
+          "action": "Assigned",
+          "detail": "Assigned to Permits & Licensing Office — Georges Matta"
+        },
+        {
+          "id": "act-0077",
+          "timestamp": "2026-06-03T06:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "Under Review -> Assigned"
+        }
+      ],
+      "source": "walk-in",
+      "resolvedAt": null
+    },
+    {
+      "id": "req-0083",
+      "referenceNumber": "REQ-2026-0013",
+      "kind": "request",
+      "citizenName": "Layal Achkar",
+      "phone": "+961 3 141 414",
+      "category": "Street Lighting",
+      "departmentId": "dept-public-works",
+      "location": "Ain El Mreisseh corniche",
+      "description": "Several streetlights along the corniche walkway are not turning on at night.",
+      "dateSubmitted": "2026-06-09T09:00:00.000Z",
+      "priority": "Normal",
+      "status": "Assigned",
+      "assignedStaffId": "staff-tarek",
+      "attachedImage": null,
+      "internalNotes": [],
+      "activityHistory": [
+        {
+          "id": "act-0079",
+          "timestamp": "2026-06-09T09:00:00.000Z",
+          "actor": "Citizen (via website)",
+          "action": "Request submitted",
+          "detail": "New request received and logged in the system."
+        },
+        {
+          "id": "act-0080",
+          "timestamp": "2026-06-09T13:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "New -> Under Review"
+        },
+        {
+          "id": "act-0081",
+          "timestamp": "2026-06-10T05:00:00.000Z",
+          "actor": "Dispatcher",
+          "action": "Assigned",
+          "detail": "Assigned to Public Works — Tarek Zeidan"
+        },
+        {
+          "id": "act-0082",
+          "timestamp": "2026-06-10T06:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "Under Review -> Assigned"
+        }
+      ],
+      "source": "website",
+      "resolvedAt": null
+    },
+    {
+      "id": "req-0086",
+      "referenceNumber": "REQ-2026-0014",
+      "kind": "complaint",
+      "citizenName": "Youssef Daou",
+      "phone": "+961 3 151 515",
+      "category": "Noise Complaints",
+      "departmentId": "dept-code-enforcement",
+      "location": "Baabda main road, near the Serail",
+      "description": "Loud construction work is starting before permitted hours.",
+      "dateSubmitted": "2026-06-15T09:00:00.000Z",
+      "priority": "Normal",
+      "status": "Under Review",
+      "assignedStaffId": null,
+      "attachedImage": null,
+      "internalNotes": [],
+      "activityHistory": [
+        {
+          "id": "act-0084",
+          "timestamp": "2026-06-15T09:00:00.000Z",
+          "actor": "Citizen (via phone)",
+          "action": "Request submitted",
+          "detail": "New request received and logged in the system."
+        },
+        {
+          "id": "act-0085",
+          "timestamp": "2026-06-15T13:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "New -> Under Review"
+        }
+      ],
+      "source": "phone",
+      "resolvedAt": null
+    },
+    {
+      "id": "req-0091",
+      "referenceNumber": "REQ-2026-0015",
+      "kind": "complaint",
+      "citizenName": "Carla Nasrallah",
+      "phone": "+961 3 161 616",
+      "category": "Illegal Dumping",
+      "departmentId": "dept-sanitation",
+      "location": "Dora highway, near the overpass",
+      "description": "Household appliances and furniture have been dumped under the highway overpass.",
+      "dateSubmitted": "2026-06-24T09:00:00.000Z",
+      "priority": "High",
+      "status": "Assigned",
+      "assignedStaffId": "staff-maria",
+      "attachedImage": null,
+      "internalNotes": [],
+      "activityHistory": [
+        {
+          "id": "act-0087",
+          "timestamp": "2026-06-24T09:00:00.000Z",
+          "actor": "Citizen (via website)",
+          "action": "Request submitted",
+          "detail": "New request received and logged in the system."
+        },
+        {
+          "id": "act-0088",
+          "timestamp": "2026-06-24T13:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "New -> Under Review"
+        },
+        {
+          "id": "act-0089",
+          "timestamp": "2026-06-25T05:00:00.000Z",
+          "actor": "Dispatcher",
+          "action": "Assigned",
+          "detail": "Assigned to Sanitation Services — Maria Abi Saab"
+        },
+        {
+          "id": "act-0090",
+          "timestamp": "2026-06-25T06:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "Under Review -> Assigned"
+        }
+      ],
+      "source": "website",
+      "resolvedAt": null
+    },
+    {
+      "id": "req-0094",
+      "referenceNumber": "REQ-2026-0016",
+      "kind": "request",
+      "citizenName": "Ramzi Abou Khalil",
+      "phone": "+961 3 171 717",
+      "category": "Parks & Trees",
+      "departmentId": "dept-parks",
+      "location": "Antelias main square",
+      "description": "A tree in the public square needs trimming as branches are touching power lines.",
+      "dateSubmitted": "2026-07-01T09:00:00.000Z",
+      "priority": "Normal",
+      "status": "Under Review",
+      "assignedStaffId": null,
+      "attachedImage": null,
+      "internalNotes": [],
+      "activityHistory": [
+        {
+          "id": "act-0092",
+          "timestamp": "2026-07-01T09:00:00.000Z",
+          "actor": "Citizen (via website)",
+          "action": "Request submitted",
+          "detail": "New request received and logged in the system."
+        },
+        {
+          "id": "act-0093",
+          "timestamp": "2026-07-01T13:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "New -> Under Review"
+        }
+      ],
+      "source": "website",
+      "resolvedAt": null
+    },
+    {
+      "id": "req-0096",
+      "referenceNumber": "REQ-2026-0017",
+      "kind": "request",
+      "citizenName": "Nour El Khoury",
+      "phone": "+961 3 181 818",
+      "category": "Roads & Potholes",
+      "departmentId": null,
+      "location": "Dbayeh residential area",
+      "description": "Deep pothole on a residential street is collecting water and growing larger.",
+      "dateSubmitted": "2026-07-08T09:00:00.000Z",
+      "priority": "High",
+      "status": "New",
+      "assignedStaffId": null,
+      "attachedImage": null,
+      "internalNotes": [],
+      "activityHistory": [
+        {
+          "id": "act-0095",
+          "timestamp": "2026-07-08T09:00:00.000Z",
+          "actor": "Citizen (via website)",
+          "action": "Request submitted",
+          "detail": "New request received and logged in the system."
+        }
+      ],
+      "source": "website",
+      "resolvedAt": null
+    },
+    {
+      "id": "req-0098",
+      "referenceNumber": "REQ-2026-0018",
+      "kind": "complaint",
+      "citizenName": "Tony Maroun",
+      "phone": "+961 3 191 919",
+      "category": "Waste Collection",
+      "departmentId": null,
+      "location": "Zouk Mikael, church street",
+      "description": "Recycling bins have not been emptied in over a week.",
+      "dateSubmitted": "2026-07-15T09:00:00.000Z",
+      "priority": "Normal",
+      "status": "New",
+      "assignedStaffId": null,
+      "attachedImage": null,
+      "internalNotes": [],
+      "activityHistory": [
+        {
+          "id": "act-0097",
+          "timestamp": "2026-07-15T09:00:00.000Z",
+          "actor": "Citizen (via website)",
+          "action": "Request submitted",
+          "detail": "New request received and logged in the system."
+        }
+      ],
+      "source": "website",
+      "resolvedAt": null
+    },
+    {
+      "id": "req-0101",
+      "referenceNumber": "REQ-2026-0019",
+      "kind": "request",
+      "citizenName": "Lea Bassil",
+      "phone": "+961 3 202 121",
+      "category": "Water & Sewage",
+      "departmentId": "dept-water",
+      "location": "Jounieh Bay, coastal road",
+      "description": "Water pressure has dropped significantly in the whole building over the past two days.",
+      "dateSubmitted": "2026-07-19T09:00:00.000Z",
+      "priority": "Urgent",
+      "status": "Under Review",
+      "assignedStaffId": null,
+      "attachedImage": "/demo/water-leak.svg",
+      "internalNotes": [],
+      "activityHistory": [
+        {
+          "id": "act-0099",
+          "timestamp": "2026-07-19T09:00:00.000Z",
+          "actor": "Citizen (via phone)",
+          "action": "Request submitted",
+          "detail": "New request received and logged in the system."
+        },
+        {
+          "id": "act-0100",
+          "timestamp": "2026-07-19T13:00:00.000Z",
+          "actor": "System",
+          "action": "Status changed",
+          "detail": "New -> Under Review"
+        }
+      ],
+      "source": "phone",
+      "resolvedAt": null
+    },
+    {
+      "id": "req-0103",
+      "referenceNumber": "REQ-2026-0020",
+      "kind": "request",
+      "citizenName": "Wissam Tannous",
+      "phone": "+961 3 212 222",
+      "category": "Street Lighting",
+      "departmentId": null,
+      "location": "Corniche Road, near the lighthouse",
+      "description": "The streetlight at the corner has been completely out for three nights, making the area unsafe for pedestrians.",
+      "dateSubmitted": "2026-07-22T09:00:00.000Z",
+      "priority": "Urgent",
+      "status": "New",
+      "assignedStaffId": null,
+      "attachedImage": "/demo/streetlight.svg",
+      "internalNotes": [],
+      "activityHistory": [
+        {
+          "id": "act-0102",
+          "timestamp": "2026-07-22T09:00:00.000Z",
+          "actor": "Citizen (via chatbot)",
+          "action": "Request submitted",
+          "detail": "New request received and logged in the system."
+        }
+      ],
+      "source": "chatbot",
+      "resolvedAt": null
+    }
+  ],
+  "notifications": [
+    {
+      "id": "notif-0140",
+      "timestamp": "2026-07-22T09:00:00.000Z",
+      "recipient": "Wissam Tannous",
+      "channel": "Email",
+      "message": "Your request REQ-2026-0020 (\"Street Lighting\") has been received and logged.",
+      "relatedRequestId": "req-0103"
+    },
+    {
+      "id": "notif-0139",
+      "timestamp": "2026-07-19T13:00:00.000Z",
+      "recipient": "Lea Bassil",
+      "channel": "SMS",
+      "message": "Update on REQ-2026-0019: your request is now \"Under Review\".",
+      "relatedRequestId": "req-0101"
+    },
+    {
+      "id": "notif-0138",
+      "timestamp": "2026-07-19T09:00:00.000Z",
+      "recipient": "Lea Bassil",
+      "channel": "SMS",
+      "message": "Your request REQ-2026-0019 (\"Water & Sewage\") has been received and logged.",
+      "relatedRequestId": "req-0101"
+    },
+    {
+      "id": "notif-0137",
+      "timestamp": "2026-07-15T09:00:00.000Z",
+      "recipient": "Tony Maroun",
+      "channel": "Email",
+      "message": "Your request REQ-2026-0018 (\"Waste Collection\") has been received and logged.",
+      "relatedRequestId": "req-0098"
+    },
+    {
+      "id": "notif-0136",
+      "timestamp": "2026-07-08T09:00:00.000Z",
+      "recipient": "Nour El Khoury",
+      "channel": "Email",
+      "message": "Your request REQ-2026-0017 (\"Roads & Potholes\") has been received and logged.",
+      "relatedRequestId": "req-0096"
+    },
+    {
+      "id": "notif-0135",
+      "timestamp": "2026-07-01T13:00:00.000Z",
+      "recipient": "Ramzi Abou Khalil",
+      "channel": "Email",
+      "message": "Update on REQ-2026-0016: your request is now \"Under Review\".",
+      "relatedRequestId": "req-0094"
+    },
+    {
+      "id": "notif-0134",
+      "timestamp": "2026-07-01T09:00:00.000Z",
+      "recipient": "Ramzi Abou Khalil",
+      "channel": "Email",
+      "message": "Your request REQ-2026-0016 (\"Parks & Trees\") has been received and logged.",
+      "relatedRequestId": "req-0094"
+    },
+    {
+      "id": "notif-0133",
+      "timestamp": "2026-06-25T06:00:00.000Z",
+      "recipient": "Carla Nasrallah",
+      "channel": "Email",
+      "message": "Update on REQ-2026-0015: your request is now \"Assigned\".",
+      "relatedRequestId": "req-0091"
+    },
+    {
+      "id": "notif-0132",
+      "timestamp": "2026-06-24T09:00:00.000Z",
+      "recipient": "Carla Nasrallah",
+      "channel": "Email",
+      "message": "Your request REQ-2026-0015 (\"Illegal Dumping\") has been received and logged.",
+      "relatedRequestId": "req-0091"
+    },
+    {
+      "id": "notif-0131",
+      "timestamp": "2026-06-15T13:00:00.000Z",
+      "recipient": "Youssef Daou",
+      "channel": "SMS",
+      "message": "Update on REQ-2026-0014: your request is now \"Under Review\".",
+      "relatedRequestId": "req-0086"
+    },
+    {
+      "id": "notif-0130",
+      "timestamp": "2026-06-15T09:00:00.000Z",
+      "recipient": "Youssef Daou",
+      "channel": "SMS",
+      "message": "Your request REQ-2026-0014 (\"Noise Complaints\") has been received and logged.",
+      "relatedRequestId": "req-0086"
+    },
+    {
+      "id": "notif-0129",
+      "timestamp": "2026-06-10T06:00:00.000Z",
+      "recipient": "Layal Achkar",
+      "channel": "Email",
+      "message": "Update on REQ-2026-0013: your request is now \"Assigned\".",
+      "relatedRequestId": "req-0083"
+    },
+    {
+      "id": "notif-0128",
+      "timestamp": "2026-06-09T09:00:00.000Z",
+      "recipient": "Layal Achkar",
+      "channel": "Email",
+      "message": "Your request REQ-2026-0013 (\"Street Lighting\") has been received and logged.",
+      "relatedRequestId": "req-0083"
+    },
+    {
+      "id": "notif-0127",
+      "timestamp": "2026-06-03T06:00:00.000Z",
+      "recipient": "Ziad Rizk",
+      "channel": "Email",
+      "message": "Update on REQ-2026-0012: your request is now \"Assigned\".",
+      "relatedRequestId": "req-0078"
+    },
+    {
+      "id": "notif-0126",
+      "timestamp": "2026-06-02T09:00:00.000Z",
+      "recipient": "Ziad Rizk",
+      "channel": "Email",
+      "message": "Your request REQ-2026-0012 (\"Permits & Licensing\") has been received and logged.",
+      "relatedRequestId": "req-0078"
+    },
+    {
+      "id": "notif-0125",
+      "timestamp": "2026-05-23T15:00:00.000Z",
+      "recipient": "Diala Haddad",
+      "channel": "SMS",
+      "message": "Update on REQ-2026-0011: your request is now \"In Progress\".",
+      "relatedRequestId": "req-0073"
+    },
+    {
+      "id": "notif-0124",
+      "timestamp": "2026-05-22T09:00:00.000Z",
+      "recipient": "Diala Haddad",
+      "channel": "SMS",
+      "message": "Your request REQ-2026-0011 (\"Water & Sewage\") has been received and logged.",
+      "relatedRequestId": "req-0073"
+    },
+    {
+      "id": "notif-0123",
+      "timestamp": "2026-05-12T15:00:00.000Z",
+      "recipient": "Marc Sfeir",
+      "channel": "SMS",
+      "message": "Update on REQ-2026-0010: your request is now \"In Progress\".",
+      "relatedRequestId": "req-0066"
+    },
+    {
+      "id": "notif-0122",
+      "timestamp": "2026-05-11T09:00:00.000Z",
+      "recipient": "Marc Sfeir",
+      "channel": "SMS",
+      "message": "Your request REQ-2026-0010 (\"Waste Collection\") has been received and logged.",
+      "relatedRequestId": "req-0066"
+    },
+    {
+      "id": "notif-0121",
+      "timestamp": "2026-05-04T15:00:00.000Z",
+      "recipient": "Christelle Aoun",
+      "channel": "Email",
+      "message": "Update on REQ-2026-0009: your request is now \"In Progress\".",
+      "relatedRequestId": "req-0060"
+    },
+    {
+      "id": "notif-0120",
+      "timestamp": "2026-05-03T09:00:00.000Z",
+      "recipient": "Christelle Aoun",
+      "channel": "Email",
+      "message": "Your request REQ-2026-0009 (\"Roads & Potholes\") has been received and logged.",
+      "relatedRequestId": "req-0060"
+    },
+    {
+      "id": "notif-0119",
+      "timestamp": "2026-04-23T19:00:00.000Z",
+      "recipient": "Jad Khalil",
+      "channel": "Email",
+      "message": "Update on REQ-2026-0008: your request is now \"Resolved\".",
+      "relatedRequestId": "req-0053"
+    },
+    {
+      "id": "notif-0118",
+      "timestamp": "2026-04-20T09:00:00.000Z",
+      "recipient": "Jad Khalil",
+      "channel": "Email",
+      "message": "Your request REQ-2026-0008 (\"Parks & Trees\") has been received and logged.",
+      "relatedRequestId": "req-0053"
+    },
+    {
+      "id": "notif-0117",
+      "timestamp": "2026-04-16T19:00:00.000Z",
+      "recipient": "Sarah Moussa",
+      "channel": "Email",
+      "message": "Update on REQ-2026-0007: your request is now \"Closed\".",
+      "relatedRequestId": "req-0046"
+    },
+    {
+      "id": "notif-0116",
+      "timestamp": "2026-04-12T09:00:00.000Z",
+      "recipient": "Sarah Moussa",
+      "channel": "Email",
+      "message": "Your request REQ-2026-0007 (\"Street Lighting\") has been received and logged.",
+      "relatedRequestId": "req-0046"
+    },
+    {
+      "id": "notif-0115",
+      "timestamp": "2026-04-07T19:00:00.000Z",
+      "recipient": "Antoine Freij",
+      "channel": "SMS",
+      "message": "Update on REQ-2026-0006: your request is now \"Resolved\".",
+      "relatedRequestId": "req-0039"
+    },
+    {
+      "id": "notif-0114",
+      "timestamp": "2026-04-04T09:00:00.000Z",
+      "recipient": "Antoine Freij",
+      "channel": "SMS",
+      "message": "Your request REQ-2026-0006 (\"Noise Complaints\") has been received and logged.",
+      "relatedRequestId": "req-0039"
+    },
+    {
+      "id": "notif-0113",
+      "timestamp": "2026-03-26T07:00:00.000Z",
+      "recipient": "Hala Naccache",
+      "channel": "Email",
+      "message": "Update on REQ-2026-0005: your request could not be processed. Reason provided in-app.",
+      "relatedRequestId": "req-0031"
+    },
+    {
+      "id": "notif-0112",
+      "timestamp": "2026-03-25T09:00:00.000Z",
+      "recipient": "Hala Naccache",
+      "channel": "Email",
+      "message": "Your request REQ-2026-0005 (\"Illegal Dumping\") has been received and logged.",
+      "relatedRequestId": "req-0031"
+    },
+    {
+      "id": "notif-0111",
+      "timestamp": "2026-03-15T19:00:00.000Z",
+      "recipient": "Fadi Chalhoub",
+      "channel": "Email",
+      "message": "Update on REQ-2026-0004: your request is now \"Closed\".",
+      "relatedRequestId": "req-0028"
+    },
+    {
+      "id": "notif-0110",
+      "timestamp": "2026-03-14T09:00:00.000Z",
+      "recipient": "Fadi Chalhoub",
+      "channel": "Email",
+      "message": "Your request REQ-2026-0004 (\"Permits & Licensing\") has been received and logged.",
+      "relatedRequestId": "req-0028"
+    },
+    {
+      "id": "notif-0109",
+      "timestamp": "2026-03-05T19:00:00.000Z",
+      "recipient": "Rita Saliba",
+      "channel": "SMS",
+      "message": "Update on REQ-2026-0003: your request is now \"Resolved\".",
+      "relatedRequestId": "req-0021"
+    },
+    {
+      "id": "notif-0108",
+      "timestamp": "2026-03-02T09:00:00.000Z",
+      "recipient": "Rita Saliba",
+      "channel": "SMS",
+      "message": "Your request REQ-2026-0003 (\"Water & Sewage\") has been received and logged.",
+      "relatedRequestId": "req-0021"
+    },
+    {
+      "id": "notif-0107",
+      "timestamp": "2026-02-21T19:00:00.000Z",
+      "recipient": "Elie Boutros",
+      "channel": "Email",
+      "message": "Update on REQ-2026-0002: your request is now \"Resolved\".",
+      "relatedRequestId": "req-0014"
+    },
+    {
+      "id": "notif-0106",
+      "timestamp": "2026-02-18T09:00:00.000Z",
+      "recipient": "Elie Boutros",
+      "channel": "Email",
+      "message": "Your request REQ-2026-0002 (\"Waste Collection\") has been received and logged.",
+      "relatedRequestId": "req-0014"
+    },
+    {
+      "id": "notif-0105",
+      "timestamp": "2026-02-10T19:00:00.000Z",
+      "recipient": "Nadia Karam",
+      "channel": "Email",
+      "message": "Update on REQ-2026-0001: your request is now \"Closed\".",
+      "relatedRequestId": "req-0007"
+    },
+    {
+      "id": "notif-0104",
+      "timestamp": "2026-02-03T09:00:00.000Z",
+      "recipient": "Nadia Karam",
+      "channel": "Email",
+      "message": "Your request REQ-2026-0001 (\"Roads & Potholes\") has been received and logged.",
+      "relatedRequestId": "req-0007"
+    }
+  ]
+}
