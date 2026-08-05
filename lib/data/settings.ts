@@ -1,5 +1,7 @@
 import "server-only";
 
+import { cache } from "react";
+
 import { all, get, run } from "@/lib/db/client";
 
 export interface AppSettings {
@@ -20,8 +22,13 @@ export const DEFAULT_SETTINGS: AppSettings = {
   autoRefreshSeconds: 30,
 };
 
-/** Values are stored as text; the accessor coerces back to the declared shape. */
-export function getSettings(): AppSettings {
+/**
+ * Values are stored as text; the accessor coerces back to the declared
+ * shape. Wrapped in `cache()` because every dashboard render reads it from
+ * the layout, PageShell, and the page itself — one query per request
+ * instead of two or three identical ones.
+ */
+export const getSettings = cache((): AppSettings => {
   const rows = all<{ key: string; value: string }>("SELECT key, value FROM settings");
   const stored = Object.fromEntries(rows.map((row) => [row.key, row.value]));
 
@@ -42,7 +49,7 @@ export function getSettings(): AppSettings {
     defaultRequestPriority: stored.defaultRequestPriority ?? DEFAULT_SETTINGS.defaultRequestPriority,
     autoRefreshSeconds: Number(stored.autoRefreshSeconds ?? DEFAULT_SETTINGS.autoRefreshSeconds),
   };
-}
+});
 
 export function setSetting(key: keyof AppSettings, value: string | number | boolean): void {
   run(
