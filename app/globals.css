@@ -161,6 +161,14 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    /* A cheap, blanket crossfade for the light/dark toggle and any hover
+       state that doesn't declare its own transition-property. Components
+       that need a different set of animated properties (buttons, table
+       rows, …) declare their own transition-* utility, which — being in
+       the utilities layer — wins over this base-layer default. */
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-timing-function: ease;
+    transition-duration: 150ms;
   }
 
   body {
@@ -175,11 +183,32 @@
   body {
     overscroll-behavior-y: none;
   }
+
+  /* Respect the OS/browser motion preference: collapse every animation and
+     transition to effectively instant rather than disabling them outright,
+     so state changes (theme toggle, dialogs, skeletons) still complete
+     correctly without the motion. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
 
 @layer utilities {
-  /* Keeps the scrollbar from shifting layout in scrollable panes. */
+  /* Keeps the scrollbar from shifting layout in scrollable panes, and
+     contains overscroll to the pane itself — without this, hitting the
+     top or bottom of a nested scroll container (e.g. the settings page,
+     which is taller than the viewport) lets the scroll chain to the
+     document and trigger the browser's native rubber-band/glow effect,
+     which reads as the whole screen "jumping" at the scroll boundary. */
   .scrollbar-stable {
     scrollbar-gutter: stable;
+    overscroll-behavior: contain;
   }
 }

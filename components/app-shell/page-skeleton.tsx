@@ -18,7 +18,7 @@ export function PageSkeleton() {
         <Skeleton className="size-9 shrink-0 rounded-full" />
       </header>
 
-      <main className="flex-1 overflow-y-auto p-3 sm:p-5 lg:p-6">
+      <main className="animate-in fade-in-0 flex-1 overflow-y-auto p-3 duration-300 sm:p-5 lg:p-6">
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 xl:grid-cols-8">
           {Array.from({ length: 8 }).map((_, i) => (
             <Skeleton key={i} className="h-20 rounded-xl" />

@@ -34,8 +34,8 @@ export function MetricCard({
   );
 
   const className = cn(
-    "bg-card rounded-xl border p-4 transition-colors",
-    href && "hover:border-primary/40 block"
+    "bg-card rounded-xl border p-4 transition-[color,box-shadow,border-color,transform] duration-200",
+    href && "hover:border-primary/40 hover:-translate-y-0.5 hover:shadow-md block"
   );
 
   return href ? (

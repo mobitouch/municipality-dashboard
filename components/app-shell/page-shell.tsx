@@ -59,7 +59,7 @@ export async function PageShell({
 
       <main
         className={cn(
-          "scrollbar-stable flex-1 overflow-y-auto p-3 sm:p-5 lg:p-6",
+          "scrollbar-stable animate-in fade-in-0 flex-1 overflow-y-auto p-3 duration-300 sm:p-5 lg:p-6",
           contentClassName
         )}
       >
