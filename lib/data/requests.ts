@@ -599,6 +599,81 @@ export function deleteRequest(id: string): boolean {
   return run("DELETE FROM requests WHERE id = :id", { id }).changes > 0;
 }
 
+export interface PublicTrackingEvent {
+  action: string;
+  detail: string;
+  timestamp: string;
+}
+
+export interface PublicTrackingStatus {
+  referenceNumber: string;
+  kind: RequestKind;
+  category: string;
+  departmentName: string | null;
+  status: RequestStatus;
+  priority: Priority;
+  dateSubmitted: string;
+  updatedAt: string;
+  resolvedAt: string | null;
+  timeline: PublicTrackingEvent[];
+}
+
+// Only activity types safe to show a citizen — excludes internal notes,
+// staff-assignment names, and other back-office bookkeeping.
+const PUBLIC_ACTIVITY_ACTIONS = new Set(["Request submitted", "Status changed", "Department assigned"]);
+
+function normalizePhone(value: string): string {
+  return value.replace(/\D/g, "");
+}
+
+/**
+ * Public-facing lookup for the "track your complaint" page: finds a request
+ * by its reference number, but only returns anything if the caller also
+ * supplies the phone or email on file — the reference number alone isn't
+ * treated as a secret, so this prevents scraping other citizens' cases.
+ */
+export function getRequestForTracking(reference: string, contact: string): PublicTrackingStatus | null {
+  const normalizedRef = reference.trim().toUpperCase();
+  const trimmedContact = contact.trim();
+  if (!normalizedRef || !trimmedContact) return null;
+
+  const row = get<RequestRow>(
+    `SELECT ${SELECT_COLUMNS} ${FROM_JOINS} WHERE r.reference_number = :reference`,
+    { reference: normalizedRef }
+  );
+  if (!row) return null;
+
+  const request = toRequest(row);
+  const phoneMatch =
+    !!request.phone && normalizePhone(request.phone) !== "" && normalizePhone(request.phone) === normalizePhone(trimmedContact);
+  const emailMatch = !!request.email && request.email.toLowerCase() === trimmedContact.toLowerCase();
+  if (!phoneMatch && !emailMatch) return null;
+
+  const timeline = all<{ action: string; detail: string; created_at: string }>(
+    "SELECT action, detail, created_at FROM request_activity WHERE request_id = :id ORDER BY created_at ASC",
+    { id: request.id }
+  )
+    .filter((entry) => PUBLIC_ACTIVITY_ACTIONS.has(entry.action))
+    .map((entry): PublicTrackingEvent => ({
+      action: entry.action,
+      detail: entry.detail,
+      timestamp: entry.created_at,
+    }));
+
+  return {
+    referenceNumber: request.referenceNumber,
+    kind: request.kind,
+    category: request.category,
+    departmentName: request.departmentName,
+    status: request.status,
+    priority: request.priority,
+    dateSubmitted: request.dateSubmitted,
+    updatedAt: request.updatedAt,
+    resolvedAt: request.resolvedAt,
+    timeline,
+  };
+}
+
 export function countRequests(query: RequestQuery = {}): number {
   const { sql: where, params } = buildWhere(query);
   return get<{ count: number }>(`SELECT COUNT(*) AS count ${FROM_JOINS} ${where}`, params)?.count ?? 0;
