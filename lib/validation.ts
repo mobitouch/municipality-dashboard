@@ -190,6 +190,27 @@ export const apiKeySchema = z.object({
 });
 
 /** The payload external callers POST to /api/requests. */
+/**
+ * `attachedImage` is rendered straight into an `<img src>` on the request
+ * detail screen, so whoever holds an integration key chooses what a staff
+ * member's browser fetches when they open a complaint. React escapes the
+ * attribute, so this is not XSS — but an arbitrary URL still turns every
+ * staff view into a callback to a third party, leaking the municipality's IP
+ * and the fact that a specific complaint is being read. `javascript:` and
+ * `data:` are rejected outright; everything else must be plain https or a
+ * path on this site.
+ */
+function isSafeImageUrl(value: string): boolean {
+  if (value === "") return true;
+  // Site-relative, but not protocol-relative ("//evil.com/x.png").
+  if (value.startsWith("/") && !value.startsWith("//")) return true;
+  try {
+    return new URL(value).protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 export const externalRequestSchema = z.object({
   citizenName: z.string().trim().min(2).max(120),
   phone: z.string().trim().max(40).optional().default(""),
@@ -200,5 +221,12 @@ export const externalRequestSchema = z.object({
   description: z.string().trim().min(5).max(4000),
   priority: z.enum(PRIORITIES).optional().default("Normal"),
   source: z.enum(REQUEST_SOURCES).optional(),
-  attachedImage: z.string().trim().max(500).optional(),
+  attachedImage: z
+    .string()
+    .trim()
+    .max(500)
+    .refine(isSafeImageUrl, {
+      message: "attachedImage must be an https:// URL or a site-relative path.",
+    })
+    .optional(),
 });

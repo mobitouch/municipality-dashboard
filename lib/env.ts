@@ -54,19 +54,41 @@ export const env = {
     : raw.NODE_ENV !== "production",
 };
 
+/** True when the bootstrap admin would be created with the shipped default. */
+export function usingDefaultAdminPassword(): boolean {
+  return !process.env.ADMIN_PASSWORD;
+}
+
 /**
- * Warns rather than throws: an operator who never sets ADMIN_PASSWORD still
- * gets a working app, but the log makes it obvious the default is in use.
+ * Refuses to create the very first administrator with the default password on
+ * a production deployment.
+ *
+ * This used to be a console warning. A warning is not a control: the default
+ * is committed in `.env.example`, so anyone who can read the repository can
+ * sign in to an internet-facing dashboard holding citizens' names, phone
+ * numbers and addresses — and because the bootstrap account is created with
+ * `must_change_password = 0`, nothing would prompt anyone to change it.
+ *
+ * Deliberately narrow. It throws only when the users table is empty and we are
+ * about to create that account for real, so an already-deployed instance with
+ * genuine accounts is never blocked from booting by this check — for it,
+ * ADMIN_PASSWORD is irrelevant.
  */
+export function assertBootstrapAdminSafe(): void {
+  if (!env.isProduction || !usingDefaultAdminPassword()) return;
+
+  throw new Error(
+    "Refusing to create the bootstrap administrator with the default password in production.\n" +
+      "ADMIN_PASSWORD is unset, and the fallback is published in .env.example.\n" +
+      "Set ADMIN_PASSWORD to a strong value in the hosting environment and restart."
+  );
+}
+
+/** Non-fatal configuration smells, surfaced in the boot log. */
 export function assertProductionSafety(): string[] {
   const warnings: string[] = [];
   if (!env.isProduction) return warnings;
 
-  if (!process.env.ADMIN_PASSWORD) {
-    warnings.push(
-      "ADMIN_PASSWORD is not set — the bootstrap administrator uses a publicly known default. Set it before first boot, or change the password immediately after signing in."
-    );
-  }
   if (env.seedDemoData) {
     warnings.push("SEED_DEMO_DATA=true in production — sample requests will be inserted.");
   }

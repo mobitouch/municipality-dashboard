@@ -3,9 +3,9 @@ import type { NextRequest } from "next/server";
 
 import { authenticate, requireSession, unauthorized } from "@/lib/auth/request-auth";
 import { can } from "@/lib/auth/permissions";
-import { listAllRequests, type RequestSort } from "@/lib/data/requests";
+import { listAllRequests } from "@/lib/data/requests";
 import { toCsv } from "@/lib/format";
-import type { RequestKind } from "@/lib/types";
+import { parseRequestQuery } from "@/lib/request-query";
 
 export const dynamic = "force-dynamic";
 
@@ -19,19 +19,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const params = request.nextUrl.searchParams;
-  const requests = listAllRequests({
-    kind: (params.get("kind") as RequestKind) || undefined,
-    status: params.get("status") ?? undefined,
-    departmentId: params.get("departmentId") ?? undefined,
-    categoryId: params.get("categoryId") ?? undefined,
-    assignedStaffId: params.get("assignedStaffId") ?? undefined,
-    priority: params.get("priority") ?? undefined,
-    q: params.get("q") ?? undefined,
-    dateFrom: params.get("dateFrom") ?? undefined,
-    dateTo: params.get("dateTo") ?? undefined,
-    sort: (params.get("sort") as RequestSort) || undefined,
-  });
+  const requests = listAllRequests(
+    parseRequestQuery(request.nextUrl.searchParams, { paginated: false })
+  );
 
   const csv = toCsv(
     requests.map((entry) => ({

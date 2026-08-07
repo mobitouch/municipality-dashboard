@@ -3,7 +3,12 @@ import "server-only";
 import fs from "node:fs";
 import path from "node:path";
 
-import { env, assertProductionSafety } from "@/lib/env";
+import {
+  env,
+  assertBootstrapAdminSafe,
+  assertProductionSafety,
+  usingDefaultAdminPassword,
+} from "@/lib/env";
 import { hashPassword } from "@/lib/auth/password";
 import { createApiKey, apiKeyCount } from "@/lib/auth/api-key";
 import { all, get, run, transaction } from "./client";
@@ -269,7 +274,13 @@ export async function ensureBootstrapped(): Promise<void> {
   const now = new Date().toISOString();
 
   const needsAdmin = count("users") === 0;
+  if (needsAdmin) assertBootstrapAdminSafe();
+
   const passwordHash = needsAdmin ? await hashPassword(env.ADMIN_PASSWORD) : "";
+  // Outside production the default password is allowed, but the account is
+  // flagged so the first sign-in is forced through the change-password screen
+  // rather than landing straight on the dashboard.
+  const mustChangePassword = usingDefaultAdminPassword() ? 1 : 0;
 
   transaction(() => {
     seedStructure(now);
@@ -278,12 +289,13 @@ export async function ensureBootstrapped(): Promise<void> {
       run(
         `INSERT INTO users (id, name, email, password_hash, role, department_id, is_active,
                             must_change_password, created_at, updated_at)
-         VALUES (:id, :name, :email, :passwordHash, 'admin', NULL, 1, 0, :now, :now)`,
+         VALUES (:id, :name, :email, :passwordHash, 'admin', NULL, 1, :mustChangePassword, :now, :now)`,
         {
           id: newId("user"),
           name: env.ADMIN_NAME,
           email: env.ADMIN_EMAIL,
           passwordHash,
+          mustChangePassword,
           now,
         }
       );

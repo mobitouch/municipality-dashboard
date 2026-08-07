@@ -4,10 +4,10 @@ import type { NextRequest } from "next/server";
 import { authenticate, unauthorized } from "@/lib/auth/request-auth";
 import { can } from "@/lib/auth/permissions";
 import { findCategoryByName } from "@/lib/data/categories";
-import { createRequest, listRequests, type RequestSort } from "@/lib/data/requests";
+import { createRequest, listRequests } from "@/lib/data/requests";
 import { externalRequestSchema } from "@/lib/validation";
-import { DEFAULT_PAGE_SIZE } from "@/lib/constants";
-import type { RequestKind } from "@/lib/types";
+import { parseRequestQuery } from "@/lib/request-query";
+import { intakeLimitExceeded } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -15,23 +15,9 @@ export async function GET(request: NextRequest) {
   const caller = authenticate(request);
   if (!caller) return unauthorized();
 
-  const params = request.nextUrl.searchParams;
-  const results = listRequests({
-    kind: (params.get("kind") as RequestKind) || undefined,
-    status: params.get("status") ?? undefined,
-    departmentId: params.get("departmentId") ?? undefined,
-    categoryId: params.get("categoryId") ?? undefined,
-    assignedStaffId: params.get("assignedStaffId") ?? undefined,
-    priority: params.get("priority") ?? undefined,
-    q: params.get("q") ?? undefined,
-    dateFrom: params.get("dateFrom") ?? undefined,
-    dateTo: params.get("dateTo") ?? undefined,
-    sort: (params.get("sort") as RequestSort) || undefined,
-    page: Number(params.get("page")) || 1,
-    pageSize: Number(params.get("pageSize")) || DEFAULT_PAGE_SIZE,
-  });
+  const results = listRequests(parseRequestQuery(request.nextUrl.searchParams));
 
-  return NextResponse.json(results);
+  return NextResponse.json(results, { headers: { "Cache-Control": "no-store" } });
 }
 
 /**
@@ -44,6 +30,14 @@ export async function POST(request: NextRequest) {
 
   if (caller.kind === "session" && !can(caller.user.role, "requests:create")) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  const callerId = caller.kind === "session" ? caller.user.id : caller.keyId;
+  if (intakeLimitExceeded(callerId)) {
+    return NextResponse.json(
+      { error: "Too many submissions. Try again shortly." },
+      { status: 429, headers: { "Retry-After": "60" } }
+    );
   }
 
   const body = await request.json().catch(() => null);

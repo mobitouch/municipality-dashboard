@@ -10,6 +10,7 @@ import {
   createSession,
   destroyAllSessionsForUser,
   destroySession,
+  ipIdentifier,
   loginAttemptsExceeded,
   recordLoginFailure,
 } from "@/lib/auth/session";
@@ -19,6 +20,7 @@ import {
   requireActionUser,
   setSessionCookie,
 } from "@/lib/auth/dal";
+import { getClientIp } from "@/lib/auth/client-ip";
 import { recordAudit } from "@/lib/data/audit";
 import {
   emailTaken,
@@ -49,9 +51,18 @@ export async function loginAction(
 
     const { email, password } = parsed.data;
 
-    if (loginAttemptsExceeded(email)) {
+    // Two throttles: one on the account being targeted, one on the source
+    // address. The per-account counter alone allows password spraying — a
+    // single guess against each of a hundred addresses trips nothing.
+    const ipKey = ipIdentifier(await getClientIp());
+    if (loginAttemptsExceeded(email) || loginAttemptsExceeded(ipKey)) {
       return errorState("Too many failed attempts. Try again in 15 minutes.");
     }
+
+    const recordFailure = () => {
+      recordLoginFailure(email);
+      recordLoginFailure(ipKey);
+    };
 
     const credentials = getUserCredentials(email);
 
@@ -59,13 +70,13 @@ export async function loginAction(
     // not reveal which addresses exist.
     if (!credentials) {
       await fakeVerify();
-      recordLoginFailure(email);
+      recordFailure();
       return errorState("Incorrect email or password.");
     }
 
     const valid = await verifyPassword(password, credentials.passwordHash);
     if (!valid) {
-      recordLoginFailure(email);
+      recordFailure();
       return errorState("Incorrect email or password.");
     }
 
@@ -74,6 +85,7 @@ export async function loginAction(
     }
 
     clearLoginFailures(email);
+    clearLoginFailures(ipKey);
     recordLogin(credentials.id);
 
     const userAgent = (await headers()).get("user-agent") ?? "";
