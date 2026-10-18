@@ -1,7 +1,5 @@
-"use client";
-
 import * as React from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/lib/client/navigation";
 
 import { Field } from "@/components/form/field";
 import { FormDialog } from "@/components/form/form-dialog";

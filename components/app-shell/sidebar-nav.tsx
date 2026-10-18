@@ -1,23 +1,16 @@
-"use client";
-
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link } from "@/components/link";
+import { usePathname } from "@/lib/client/navigation";
 import { Landmark } from "lucide-react";
 
 import { NAV_ITEMS, NAV_SECTIONS } from "./nav-items";
+import { useAllowedHrefs, useSession } from "@/lib/client/session";
 import { cn } from "@/lib/utils";
 
-export function SidebarNav({
-  allowedHrefs,
-  organisationName,
-  onNavigate,
-}: {
-  allowedHrefs: string[];
-  organisationName: string;
-  onNavigate?: () => void;
-}) {
+export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
-  const allowed = new Set(allowedHrefs);
+  const { session } = useSession();
+  const organisationName = session?.settings.organisationName ?? "";
+  const allowed = new Set(useAllowedHrefs());
   const items = NAV_ITEMS.filter((item) => allowed.has(item.href));
 
   return (

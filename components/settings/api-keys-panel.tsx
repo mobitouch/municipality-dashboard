@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { useActionState } from "react";
 import { BanIcon, CheckIcon, CopyIcon, KeyRoundIcon, PlusIcon, Trash2Icon } from "lucide-react";

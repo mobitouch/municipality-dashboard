@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { MoreHorizontalIcon, PencilIcon, Trash2Icon } from "lucide-react";
 

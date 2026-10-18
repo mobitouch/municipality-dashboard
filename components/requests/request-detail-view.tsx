@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/components/link";
 import {
   ArrowLeftIcon,
   CalendarIcon,
@@ -67,11 +67,8 @@ export function RequestDetailView({
   canAssign: boolean;
   canDelete: boolean;
 }) {
-  // This is a Server Component, fully re-executed on every request, so
-  // Date.now() here doesn't have the memoization hazard the lint rule is
-  // written for (that concern applies to Client Components under the React
-  // Compiler); it's a single read of the current time to flag an overdue
-  // request, not a value that needs to stay stable across re-renders.
+  // A single read of the current time to flag an overdue request; it does not
+  // need to stay stable across re-renders.
   // eslint-disable-next-line react-hooks/purity
   const now = Date.now();
   const overdue =
@@ -196,9 +193,6 @@ export function RequestDetailView({
                 <>
                   <Separator className="my-4" />
                   <p className="text-muted-foreground mb-2 text-xs">Attachment</p>
-                  {/* Citizen uploads are arbitrary paths, so the optimiser is
-                      bypassed deliberately here. */}
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={request.attachedImage}
                     alt="Citizen attachment"

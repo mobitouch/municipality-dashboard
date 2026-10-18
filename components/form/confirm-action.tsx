@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { useActionState } from "react";
 import { Loader2Icon } from "lucide-react";

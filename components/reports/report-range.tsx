@@ -1,7 +1,5 @@
-"use client";
-
 import * as React from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "@/lib/client/navigation";
 import { XIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";

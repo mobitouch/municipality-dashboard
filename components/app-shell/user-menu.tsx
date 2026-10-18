@@ -1,6 +1,4 @@
-"use client";
-
-import Link from "next/link";
+import { Link } from "@/components/link";
 import { LogOutIcon, MonitorIcon, MoonIcon, SettingsIcon, SunIcon } from "lucide-react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -17,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useTheme, type Theme } from "@/components/theme-provider";
 import { logoutAction } from "@/lib/actions/auth";
+import { idleState } from "@/lib/actions/types";
 import { ROLE_LABELS } from "@/lib/constants";
 import type { UserRole } from "@/lib/types";
 
@@ -89,7 +88,7 @@ export function UserMenu({
         </DropdownMenuRadioGroup>
 
         <DropdownMenuSeparator />
-        <form action={logoutAction}>
+        <form action={async () => void (await logoutAction(idleState, new FormData()))}>
           <button
             type="submit"
             className="focus:bg-accent focus:text-accent-foreground text-destructive relative flex w-full cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none [&_svg]:size-4"

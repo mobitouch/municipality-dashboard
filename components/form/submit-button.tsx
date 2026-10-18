@@ -1,5 +1,3 @@
-"use client";
-
 import { useFormStatus } from "react-dom";
 import { Loader2Icon } from "lucide-react";
 

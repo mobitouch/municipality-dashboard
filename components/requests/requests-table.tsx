@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/components/link";
 import { InboxIcon, PaperclipIcon, StickyNoteIcon } from "lucide-react";
 
 import { PriorityBadge, StatusBadge } from "@/components/badges";
@@ -39,10 +39,8 @@ export function RequestsTable({
     );
   }
 
-  // Read once for the whole table rather than once per row. This also
-  // sidesteps the "impure call during render" lint rule, which targets
-  // memoizable Client Components — this table is a Server Component that
-  // fully re-executes on every request regardless.
+  // Read once for the whole table rather than once per row. It only flags
+  // overdue rows, so it need not stay stable across re-renders.
   // eslint-disable-next-line react-hooks/purity
   const now = Date.now();
 
