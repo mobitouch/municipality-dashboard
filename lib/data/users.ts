@@ -1,5 +1,3 @@
-import "server-only";
-
 import { all, bool, get, run } from "@/lib/db/client";
 import { newId } from "@/lib/db/ids";
 import { hashPassword } from "@/lib/auth/password";

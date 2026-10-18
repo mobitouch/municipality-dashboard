@@ -1,5 +1,3 @@
-import "server-only";
-
 import { all, run } from "@/lib/db/client";
 import { newId } from "@/lib/db/ids";
 import type { AuditEntry } from "@/lib/types";

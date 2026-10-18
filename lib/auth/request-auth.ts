@@ -1,10 +1,8 @@
-import "server-only";
-
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
+import type { Request, Response } from "express";
 
 import { SESSION_COOKIE } from "@/lib/constants";
 import { verifyApiKey } from "./api-key";
+import { headerValue, readCookie } from "./request-context";
 import { resolveSession, type SessionUser } from "./session";
 
 export type RequestCaller =
@@ -16,22 +14,21 @@ export type RequestCaller =
  * own fetches) or a valid integration key (the website, n8n). Everything
  * else is anonymous.
  */
-export function authenticate(request: NextRequest): RequestCaller | null {
-  const token = request.cookies.get(SESSION_COOKIE)?.value;
+export function authenticate(req: Request): RequestCaller | null {
+  const token = readCookie(req, SESSION_COOKIE);
   const user = resolveSession(token);
   if (user) return { kind: "session", user };
 
-  const key = verifyApiKey(request.headers.get("x-api-key"));
+  const key = verifyApiKey(headerValue(req, "x-api-key"));
   if (key) return { kind: "apiKey", keyId: key.id, label: key.label };
 
   return null;
 }
 
-export function unauthorized(): NextResponse {
-  return NextResponse.json(
-    { error: "Unauthorized. Provide a valid session cookie or x-api-key header." },
-    { status: 401 }
-  );
+export function unauthorized(res: Response): void {
+  res
+    .status(401)
+    .json({ error: "Unauthorized. Provide a valid session cookie or x-api-key header." });
 }
 
 export function requireSession(caller: RequestCaller | null): SessionUser | null {

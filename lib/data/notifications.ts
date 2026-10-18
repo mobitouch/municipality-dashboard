@@ -1,5 +1,3 @@
-import "server-only";
-
 import { all, get } from "@/lib/db/client";
 import { DEFAULT_PAGE_SIZE } from "@/lib/constants";
 import type { Notification, NotificationChannel, Paginated } from "@/lib/types";

@@ -1,5 +1,3 @@
-import "server-only";
-
 import { all, bool, get, run } from "@/lib/db/client";
 import { newId } from "@/lib/db/ids";
 import type { Category, RequestKind } from "@/lib/types";

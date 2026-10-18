@@ -1,5 +1,3 @@
-import "server-only";
-
 import fs from "node:fs";
 import path from "node:path";
 import { DatabaseSync, type StatementSync } from "node:sqlite";
@@ -12,8 +10,8 @@ export type SqlParams = Record<string, SqlValue> | SqlValue[];
 /**
  * SQLite is single-writer, so a single long-lived connection per process is
  * both correct and fastest — no pool, no per-request open cost. The handle
- * is parked on globalThis so Next.js's dev-mode module reloading doesn't
- * leak a new connection (and a new set of file locks) on every edit.
+ * is parked on globalThis so a dev-mode module reload doesn't leak a new
+ * connection (and a new set of file locks) on every edit.
  */
 declare global {
   var __municipalityDb: DatabaseSync | undefined;
@@ -23,12 +21,7 @@ declare global {
 export function databasePath(): string {
   const configured = process.env.DATABASE_PATH?.trim();
   if (configured) {
-    // DATABASE_PATH is operator-controlled config, not user input — the
-    // turbopackIgnore hint stops the bundler from tracing the whole
-    // filesystem as a dependency of this (legitimately) dynamic join.
-    return path.isAbsolute(configured)
-      ? configured
-      : path.join(/* turbopackIgnore: true */ process.cwd(), configured);
+    return path.isAbsolute(configured) ? configured : path.join(process.cwd(), configured);
   }
   return path.join(process.cwd(), "data", "dashboard.db");
 }
@@ -83,12 +76,10 @@ function statement(sql: string): StatementSync {
 
 /**
  * node:sqlite returns each row as an `Object.create(null)` record — no
- * Object.prototype. That's invisible almost everywhere, but React Server
- * Components refuse to serialize null-prototype objects across the
- * server/client boundary, so a raw row reaching a Client Component prop
- * throws. Spreading into a literal here, once, at the boundary between
- * SQLite and the rest of the app, means no call site has to remember to
- * do it themselves.
+ * Object.prototype. That's invisible almost everywhere, but serializers and
+ * equality helpers can trip on it. Spreading into a literal here, once, at
+ * the boundary between SQLite and the rest of the app, means no call site
+ * has to remember to do it themselves.
  */
 function plain<T>(row: unknown): T {
   return { ...(row as object) } as T;

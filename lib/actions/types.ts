@@ -1,8 +1,8 @@
 /**
- * Split out from helpers.ts deliberately: this file must stay free of
- * "server-only" — client components (form dialogs, the workflow panel)
- * import `idleState`/`ActionState` to seed `useActionState`, and pulling
- * in the server-only chain here would break the client bundle.
+ * Shared by the browser and the server. Client components import
+ * `idleState`/`ActionState` to seed `useActionState`, and the server builds
+ * its responses from the same constructors, so this file must stay free of
+ * anything Node-only.
  */
 export interface ActionState {
   status: "idle" | "success" | "error";
@@ -12,6 +12,8 @@ export interface ActionState {
   ranAt?: number;
   /** Set by actions that hand a value back, e.g. a freshly minted API key. */
   payload?: Record<string, string>;
+  /** A path the browser should navigate to once the action has completed. */
+  redirect?: string;
 }
 
 export const idleState: ActionState = { status: "idle" };

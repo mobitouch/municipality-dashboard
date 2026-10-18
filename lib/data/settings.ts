@@ -1,5 +1,3 @@
-import "server-only";
-
 import { all, get, run } from "@/lib/db/client";
 
 export interface AppSettings {
@@ -20,7 +18,10 @@ export const DEFAULT_SETTINGS: AppSettings = {
   autoRefreshSeconds: 30,
 };
 
-/** Values are stored as text; the accessor coerces back to the declared shape. */
+/**
+ * Values are stored as text; the accessor coerces back to the declared
+ * shape.
+ */
 export function getSettings(): AppSettings {
   const rows = all<{ key: string; value: string }>("SELECT key, value FROM settings");
   const stored = Object.fromEntries(rows.map((row) => [row.key, row.value]));

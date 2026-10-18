@@ -1,5 +1,3 @@
-import "server-only";
-
 import { all, get, type SqlValue } from "@/lib/db/client";
 import { CLOSED_STATUSES, type RequestStatus } from "@/lib/types";
 

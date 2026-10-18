@@ -1,5 +1,3 @@
-import "server-only";
-
 import { createHash, randomBytes } from "node:crypto";
 
 import { all, get, run, transaction } from "@/lib/db/client";
@@ -142,9 +140,21 @@ export function listSessionsForUser(userId: string, currentToken?: string): Acti
  * Simple per-identifier throttle for the login endpoint. Attempts are kept
  * in SQLite rather than memory so the limit survives a restart and applies
  * across every worker sharing the database file.
+ *
+ * Identifiers are of two kinds, and both are needed. Keying only on the email
+ * address — the original behaviour — stops someone grinding one account, but
+ * does nothing about password spraying: one guess each against a hundred
+ * different addresses never trips a per-email counter. The `ip:` identifier
+ * caps total failures from one source regardless of which accounts are named.
  */
 const LOGIN_WINDOW_SECONDS = 15 * 60;
 const LOGIN_MAX_ATTEMPTS = 8;
+/** Looser, because one NAT'd office can legitimately hold several people. */
+const LOGIN_MAX_ATTEMPTS_PER_IP = 30;
+
+export function ipIdentifier(ip: string): string {
+  return `ip:${ip}`;
+}
 
 export function loginAttemptsExceeded(identifier: string): boolean {
   const since = new Date(Date.now() - LOGIN_WINDOW_SECONDS * 1000).toISOString();
@@ -152,7 +162,8 @@ export function loginAttemptsExceeded(identifier: string): boolean {
     "SELECT COUNT(*) AS count FROM login_attempts WHERE identifier = :identifier AND created_at > :since",
     { identifier: identifier.toLowerCase(), since }
   );
-  return (row?.count ?? 0) >= LOGIN_MAX_ATTEMPTS;
+  const max = identifier.startsWith("ip:") ? LOGIN_MAX_ATTEMPTS_PER_IP : LOGIN_MAX_ATTEMPTS;
+  return (row?.count ?? 0) >= max;
 }
 
 export function recordLoginFailure(identifier: string): void {

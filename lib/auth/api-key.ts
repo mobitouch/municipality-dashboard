@@ -1,5 +1,3 @@
-import "server-only";
-
 import { createHash, randomBytes, timingSafeEqual } from "node:crypto";
 
 import { all, get, run } from "@/lib/db/client";
