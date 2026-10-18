@@ -1,0 +1,218 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Design tokens follow the shadcn/ui contract (--background, --primary,
+ * --muted, …) so any component copied from the shadcn registry drops in
+ * unchanged. The values themselves are the municipality's palette: an
+ * olive-green primary, a clay secondary, and a warm off-white canvas.
+ */
+:root {
+  --radius: 0.65rem;
+
+  /* Self-hosted via @fontsource-variable (imported in main.tsx). */
+  --font-geist-sans: "Geist Variable";
+  --font-geist-mono: "Geist Mono Variable";
+
+  --background: oklch(0.981 0.003 106);
+  --foreground: oklch(0.278 0.019 128);
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.278 0.019 128);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.278 0.019 128);
+
+  --primary: oklch(0.452 0.068 135);
+  --primary-foreground: oklch(0.985 0.002 106);
+
+  --secondary: oklch(0.955 0.006 106);
+  --secondary-foreground: oklch(0.34 0.02 128);
+
+  --muted: oklch(0.958 0.005 106);
+  --muted-foreground: oklch(0.53 0.014 122);
+
+  --accent: oklch(0.948 0.014 122);
+  --accent-foreground: oklch(0.34 0.028 132);
+
+  --destructive: oklch(0.577 0.204 27.3);
+  --destructive-foreground: oklch(0.985 0.002 106);
+
+  --success: oklch(0.596 0.128 155);
+  --success-foreground: oklch(0.985 0.002 106);
+  --warning: oklch(0.712 0.152 72);
+  --warning-foreground: oklch(0.25 0.04 72);
+
+  --border: oklch(0.905 0.006 106);
+  --input: oklch(0.905 0.006 106);
+  --ring: oklch(0.452 0.068 135);
+
+  --chart-1: oklch(0.452 0.068 135);
+  --chart-2: oklch(0.487 0.089 62);
+  --chart-3: oklch(0.63 0.09 128);
+  --chart-4: oklch(0.66 0.12 232);
+  --chart-5: oklch(0.62 0.16 33);
+
+  --sidebar: oklch(0.278 0.019 128);
+  --sidebar-foreground: oklch(0.92 0.008 106);
+  --sidebar-primary: oklch(0.452 0.068 135);
+  --sidebar-primary-foreground: oklch(0.985 0.002 106);
+  --sidebar-accent: oklch(0.345 0.024 128);
+  --sidebar-accent-foreground: oklch(0.97 0.005 106);
+  --sidebar-border: oklch(0.36 0.022 128);
+  --sidebar-ring: oklch(0.55 0.08 135);
+}
+
+.dark {
+  --background: oklch(0.196 0.012 128);
+  --foreground: oklch(0.945 0.005 106);
+
+  --card: oklch(0.243 0.014 128);
+  --card-foreground: oklch(0.945 0.005 106);
+  --popover: oklch(0.243 0.014 128);
+  --popover-foreground: oklch(0.945 0.005 106);
+
+  --primary: oklch(0.68 0.098 135);
+  --primary-foreground: oklch(0.19 0.02 130);
+
+  --secondary: oklch(0.285 0.016 128);
+  --secondary-foreground: oklch(0.945 0.005 106);
+
+  --muted: oklch(0.285 0.016 128);
+  --muted-foreground: oklch(0.712 0.014 118);
+
+  --accent: oklch(0.318 0.022 130);
+  --accent-foreground: oklch(0.955 0.005 106);
+
+  --destructive: oklch(0.652 0.194 25.5);
+  --destructive-foreground: oklch(0.98 0.002 106);
+
+  --success: oklch(0.696 0.132 155);
+  --success-foreground: oklch(0.18 0.03 155);
+  --warning: oklch(0.79 0.14 76);
+  --warning-foreground: oklch(0.22 0.04 72);
+
+  --border: oklch(0.318 0.016 128);
+  --input: oklch(0.34 0.018 128);
+  --ring: oklch(0.68 0.098 135);
+
+  --chart-1: oklch(0.68 0.098 135);
+  --chart-2: oklch(0.7 0.11 62);
+  --chart-3: oklch(0.76 0.1 128);
+  --chart-4: oklch(0.72 0.12 232);
+  --chart-5: oklch(0.7 0.15 33);
+
+  --sidebar: oklch(0.223 0.013 128);
+  --sidebar-foreground: oklch(0.92 0.008 106);
+  --sidebar-primary: oklch(0.68 0.098 135);
+  --sidebar-primary-foreground: oklch(0.19 0.02 130);
+  --sidebar-accent: oklch(0.295 0.018 128);
+  --sidebar-accent-foreground: oklch(0.96 0.005 106);
+  --sidebar-border: oklch(0.318 0.016 128);
+  --sidebar-ring: oklch(0.55 0.08 135);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    /* A cheap, blanket crossfade for the light/dark toggle and any hover
+       state that doesn't declare its own transition-property. Components
+       that need a different set of animated properties (buttons, table
+       rows, …) declare their own transition-* utility, which — being in
+       the utilities layer — wins over this base-layer default. */
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-timing-function: ease;
+    transition-duration: 150ms;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+    /* Tabular numerals keep metric cards and table columns from jittering
+       as counts change on refresh. */
+    font-variant-numeric: tabular-nums;
+  }
+
+  html,
+  body {
+    overscroll-behavior-y: none;
+  }
+
+  /* Respect the OS/browser motion preference: collapse every animation and
+     transition to effectively instant rather than disabling them outright,
+     so state changes (theme toggle, dialogs, skeletons) still complete
+     correctly without the motion. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer utilities {
+  /* Keeps the scrollbar from shifting layout in scrollable panes, and
+     contains overscroll to the pane itself — without this, hitting the
+     top or bottom of a nested scroll container (e.g. the settings page,
+     which is taller than the viewport) lets the scroll chain to the
+     document and trigger the browser's native rubber-band/glow effect,
+     which reads as the whole screen "jumping" at the scroll boundary. */
+  .scrollbar-stable {
+    scrollbar-gutter: stable;
+    overscroll-behavior: contain;
+  }
+}

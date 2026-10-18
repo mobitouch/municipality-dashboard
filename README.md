@@ -6,25 +6,55 @@ requests and complaints. It's built to be presented live, not a production syste
 
 ## Quick Start
 
+The app is a React single-page app built with Vite (`src/`), served by a small
+Express server (`server/`) that also hosts the JSON API and the SQLite database.
+Requires Node.js 22.13 or newer (the database uses the built-in `node:sqlite`).
+
 ```bash
 npm install
 npm run seed      # (re)generate demo data — safe to run any time
 npm run dev
 ```
 
-Open http://localhost:3000 and sign in — the login screen has the demo credentials
+`npm run dev` starts the Express API on http://localhost:3000 and the Vite dev
+server (with hot reload) on http://localhost:5173 — open the latter and sign in — the login screen has the demo credentials
 pre-filled, just click **Sign in**.
 
 - **Username:** `admin@mobitouch.demo`
 - **Password:** `Demo@2026`
 
 For the actual live presentation, prefer a production build — it's faster, more
-stable, and has no dev-mode UI:
+stable, and has no dev-mode UI. In production a single process serves both the
+app and the API on one port (3000, or `PORT` if the host sets it):
 
 ```bash
-npm run build
-npm run start
+npm run build     # vite build  → dist/client,  esbuild → dist/server
+npm start         # node server.js
 ```
+
+## Deploying to Hostinger (Node.js web app)
+
+1. Push the project to GitHub (or upload it as a zip) and create a **Node.js
+   web app** in hPanel (Websites → Add website → Node.js Apps).
+2. Use these build settings:
+   - **Node.js version:** 22.x or 24.x (22.13 minimum)
+   - **Install command:** `npm install`
+   - **Build command:** `npm run build`
+   - **Start command:** `npm start`  (entry file: `server.js`)
+3. Add the environment variables from `.env.example` — at minimum
+   `ADMIN_PASSWORD` (the app refuses to create its first administrator in
+   production with the default one) and `API_KEY`. Leave `PORT` alone; Hostinger
+   sets it.
+4. The SQLite database lives at `data/dashboard.db` by default. Point
+   `DATABASE_PATH` at a location that survives redeploys, or the database
+   starts empty after each one.
+5. Set `TRUSTED_PROXY_HOPS` as described in `.env.example` so login throttling
+   sees real client addresses.
+
+The public API paths are unchanged (`/api/requests`, `/api/requests/:id`,
+`/api/requests/export`, `/api/categories`, `/api/departments`,
+`/api/notifications`, `/api/staff`, `/api/track`, `/api/health`), so the website
+and the n8n workflow only need their base URL pointed at the new deployment.
 
 ## Environment Variables
 
@@ -99,7 +129,7 @@ external callers like n8n or the website that don't have that session. Set the
 demo value once this app is reachable from the public website — the website
 needs the same value in its own `DASHBOARD_API_KEY`.
 
-Requests/Complaints/Overview/Notifications poll every 8s (`components/AutoRefresh.tsx`)
+Requests/Complaints/Overview/Notifications poll on the interval set in Settings (`components/auto-refresh.tsx`)
 so anything posted here shows up without a manual reload — useful both for the
 live n8n/website demo and for daily use.
 
@@ -128,14 +158,16 @@ SCREENSHOT_BASE_URL=http://localhost:4300 npm run screenshots
 
 ## Project Structure
 
-- `app/(dashboard)/*` — the 8 dashboard screens (Overview, Citizen Requests,
-  Complaints, Departments, Staff, Reports, Notifications, Settings), each a
-  server component reading `data/db.json` directly.
-- `app/api/*` — REST endpoints backing both the dashboard's own UI and the n8n
-  integration.
+- `src/` — the React app: `main.tsx`/`App.tsx` (routes), `pages/*` (the
+  dashboard screens), `layouts/*` (the authenticated shell, error boundary).
+- `server/` — the Express server. `routes/api.ts` is the public integration API
+  (website, n8n); `routes/app.ts` serves the dashboard's own JSON reads and form
+  mutations (`/api/app/*`); `actions/*` hold the mutation logic.
 - `components/` — shared UI (sidebar, tables, filters, charts, request detail
   actions).
-- `lib/` — types, constants, the JSON "database" helpers, and report aggregation.
+- `lib/` — types, constants, the SQLite data layer (`lib/db`, `lib/data`), auth,
+  and the browser data helpers (`lib/client`, plus `lib/actions/*`, the browser
+  handles for the actions in `server/actions/*`).
 - `scripts/seed.mjs` — generates the demo dataset; also imported directly by the
-  Settings page's reset button.
-- `proxy.ts` — gates every dashboard route behind the login session.
+  Settings page's reset button. `scripts/build-server.mjs` bundles the server.
+- `server.js` — production entry point (`npm start`).

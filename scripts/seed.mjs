@@ -8,16 +8,14 @@
 // notes, activity, and notifications before reinserting, but never touches
 // user accounts or API keys.
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { DatabaseSync } from "node:sqlite";
 
 import { MIGRATIONS } from "../lib/db/schema.ts";
 import { DEFAULT_CATEGORIES, DEFAULT_DEPARTMENTS } from "../lib/db/defaults.ts";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DB_PATH = process.env.DATABASE_PATH
-  ? path.resolve(/* turbopackIgnore: true */ process.cwd(), process.env.DATABASE_PATH)
-  : path.join(__dirname, "..", "data", "dashboard.db");
+  ? path.resolve(process.cwd(), process.env.DATABASE_PATH)
+  : path.join(process.cwd(), "data", "dashboard.db");
 
 function iso(dateStr, hoursOffset = 0) {
   const d = new Date(`${dateStr}T09:00:00Z`);
